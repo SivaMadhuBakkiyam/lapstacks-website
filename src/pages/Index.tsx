@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Star, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { HeroBackground } from "@/components/common/HeroBackground";
@@ -61,15 +61,37 @@ const stats = [
 const clientLogos = [
   { name: "LEAD", style: "text-yellow-500 font-bold" },
   { name: "aura", style: "bg-primary text-primary-foreground px-3 py-1 rounded text-sm" },
-  { name: "ShriRam", style: "text-foreground font-semibold" },
-  { name: "Bajaj Finserv", style: "text-foreground font-semibold" },
-  { name: "Lohono", style: "text-foreground font-semibold" }
+  { name: "ShriRam", style: "text-primary-foreground font-semibold" },
+  { name: "Bajaj Finserv", style: "text-primary-foreground font-semibold" },
+  { name: "Lohono", style: "text-primary-foreground font-semibold" }
 ];
 
 const Index = () => {
   return (
     <Layout>
       <PageTransition>
+        {/* HRMA Announcement Card - Moved to TOP before header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-center py-4 bg-transparent"
+        >
+          <motion.div 
+            animate={{ 
+              boxShadow: [
+                "0 0 20px rgba(139, 92, 246, 0.3)",
+                "0 0 40px rgba(139, 92, 246, 0.5)",
+                "0 0 20px rgba(139, 92, 246, 0.3)"
+              ]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="inline-flex items-center gap-3 px-6 py-3 bg-transparent border border-purple-400/50 rounded-full backdrop-blur-sm"
+          >
+            <Sparkles className="w-5 h-5 text-purple-400" />
+            <span className="text-purple-300 font-medium">New: Our HRMA Product Launch Soon</span>
+          </motion.div>
+        </motion.div>
+
         {/* Announcement Bar */}
         <div className="bg-primary py-2 text-center">
           <p className="text-primary-foreground text-sm">
@@ -87,11 +109,6 @@ const Index = () => {
                 variants={stagger}
                 className="space-y-6"
               >
-                <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground text-sm font-medium border border-border">
-                  <Star className="w-4 h-4 text-primary" />
-                  New: Our HRMA Product Launch Soon
-                </motion.div>
-                
                 <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight">
                   Transform Your Business with{" "}
                   <span className="text-primary-foreground">Expert Tech Solutions</span>
@@ -105,14 +122,14 @@ const Index = () => {
                   <Button asChild size="lg" className="bg-primary hover:bg-primary/90 rounded-full px-8">
                     <Link to="/jobs">Find Talent or Jobs</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-gray-500 text-primary-foreground hover:bg-white/10">
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white/50 text-white hover:bg-white/10 hover:text-white">
                     <Link to="/services">Browse Opportunities</Link>
                   </Button>
                 </motion.div>
                 
                 <motion.div variants={fadeInUp} className="pt-4">
                   <p className="text-sm text-gray-400 mb-4">Trusted by 75,000+ businesses worldwide</p>
-                  <div className="flex flex-wrap items-center gap-6 bg-card/80 backdrop-blur-sm rounded-full px-6 py-4 border border-border">
+                  <div className="flex flex-wrap items-center gap-6 bg-white/5 backdrop-blur-sm rounded-full px-6 py-4 border border-white/10">
                     {clientLogos.map((logo) => (
                       <span key={logo.name} className={logo.style || "text-muted-foreground font-semibold text-sm"}>
                         {logo.name}
@@ -122,7 +139,7 @@ const Index = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Service Cards */}
+              {/* Service Cards - Transparent Background */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -141,7 +158,7 @@ const Index = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + i * 0.1 }}
                     whileHover={{ scale: 1.02, x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-card rounded-xl shadow-sm border border-border hover:shadow-md transition-all cursor-pointer group"
+                    className="flex items-center gap-4 p-4 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 hover:shadow-md transition-all cursor-pointer group"
                   >
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                       <item.icon className="w-6 h-6 text-primary" />
@@ -158,38 +175,42 @@ const Index = () => {
           </div>
         </HeroBackground>
 
-        {/* Video Section */}
+        {/* Video Section - Updated with bg.svg */}
         <FadeInSection>
-          <section className="relative">
-            <div className="relative h-[400px] md:h-[500px] w-full overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70">
-                <img src={heroImage} alt="Office" className="w-full h-full object-cover mix-blend-overlay" />
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-4"
-                >
-                  Empowering Businesses Through Technology
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  className="text-primary-foreground/90 max-w-2xl mb-8"
-                >
-                  Discover how we've helped hundreds of companies transform their operations, scale their teams, and accelerate growth through innovative tech solutions.
-                </motion.p>
+          <section className="py-8 md:py-12 px-4 md:px-8 lg:px-16">
+            <div 
+              className="relative h-[300px] md:h-[350px] w-full overflow-hidden rounded-3xl"
+              style={{ backgroundImage: "url('/images/bg.svg')", backgroundSize: "cover", backgroundPosition: "center" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+              <img src={heroImage} alt="Office" className="w-full h-full object-cover mix-blend-overlay opacity-60" />
+              <div className="absolute inset-0 flex items-center px-8 md:px-16">
+                <div className="max-w-2xl">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4"
+                  >
+                    Empowering Businesses Through Technology
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="text-white/80 max-w-xl"
+                  >
+                    Discover how we've helped hundreds of companies transform their operations, scale their teams, and accelerate growth through innovative tech solutions.
+                  </motion.p>
+                </div>
                 <motion.button
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
                   whileHover={{ scale: 1.1 }}
-                  className="w-16 h-16 bg-primary-foreground rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute right-8 md:right-16 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg"
                 >
                   <Play className="w-6 h-6 text-primary ml-1" />
                 </motion.button>
@@ -198,15 +219,15 @@ const Index = () => {
           </section>
         </FadeInSection>
 
-        {/* Services Section */}
-        <section className="section-padding bg-background">
+        {/* Services Section - Updated with #F2FFF7 background */}
+        <section className="section-padding" style={{ backgroundColor: "#F2FFF7" }}>
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-16">
                 <span className="text-primary text-sm font-semibold uppercase tracking-wider">Our Services</span>
-                <h2 className="text-3xl md:text-4xl font-bold mt-2">
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 text-foreground">
                   Comprehensive Tech Solutions for{" "}
-                  <span className="text-gradient">Modern Businesses</span>
+                  <span className="bg-gradient-to-r from-brand-green to-brand-purple bg-clip-text text-transparent">Modern Businesses</span>
                 </h2>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
                   We deliver end-to-end technology services designed to help businesses scale efficiently, innovate faster, and stay competitive in a rapidly evolving digital landscape.
@@ -220,12 +241,12 @@ const Index = () => {
                   <StaggerItem key={service.title}>
                     <motion.div
                       whileHover={{ y: -5 }}
-                      className="p-8 bg-card rounded-2xl border border-border hover:shadow-lg transition-all group"
+                      className="p-8 bg-white dark:bg-card rounded-2xl border border-border hover:shadow-lg transition-all group"
                     >
                       <div className={`w-14 h-14 rounded-xl ${service.color} flex items-center justify-center mb-6`}>
                         <service.icon className="w-7 h-7" />
                       </div>
-                      <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                      <h3 className="text-xl font-bold mb-3 text-foreground">{service.title}</h3>
                       <p className="text-muted-foreground mb-4">{service.description}</p>
                       <Link
                         to="/services"
@@ -242,7 +263,7 @@ const Index = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="section-padding bg-muted/30">
+        <section className="section-padding bg-muted/30 dark:bg-muted/10">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-16">
@@ -268,7 +289,7 @@ const Index = () => {
                     />
                     <motion.div 
                       whileHover={{ scale: 1.05 }}
-                      className="absolute bottom-4 left-4 right-4 bg-primary-foreground/90 backdrop-blur-sm rounded-xl p-4 cursor-pointer"
+                      className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl p-4 cursor-pointer"
                     >
                       <div className="flex items-center gap-2 text-primary">
                         <Play className="w-8 h-8" />
@@ -320,16 +341,28 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="section-padding bg-foreground text-primary-foreground">
-          <div className="container-custom">
+        {/* Stats Section - Updated with #EDF5F4 background and globe map */}
+        <section 
+          className="section-padding relative overflow-hidden"
+          style={{ backgroundColor: "#EDF5F4" }}
+        >
+          {/* Globe Map Background */}
+          <div 
+            className="absolute inset-0 opacity-10 bg-center bg-no-repeat bg-contain"
+            style={{ 
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cellipse cx='400' cy='200' rx='350' ry='180' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cellipse cx='400' cy='200' rx='350' ry='80' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M50 200 Q400 50 750 200 Q400 350 50 200' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M400 20 Q550 200 400 380 Q250 200 400 20' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E")`
+            }}
+          />
+          <div className="container-custom relative z-10">
             <FadeInSection>
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                   Built in India, trusted worldwide
                 </h2>
-                <p className="text-primary mt-2 text-xl font-semibold">we're here 24/7 support.</p>
-                <p className="mt-4 text-gray-400 max-w-xl mx-auto">
+                <p className="mt-2 text-xl font-semibold bg-gradient-to-r from-primary via-brand-purple to-brand-green bg-clip-text text-transparent">
+                  we're here 24/7 support.
+                </p>
+                <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
                   The core values and principles that drive us to deliver excellence across continents
                 </p>
               </div>
@@ -342,7 +375,7 @@ const Index = () => {
                     <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                       <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={2000} />
                     </div>
-                    <div className="text-gray-400">{stat.label}</div>
+                    <div className="text-muted-foreground">{stat.label}</div>
                   </div>
                 </FadeInSection>
               ))}
@@ -350,27 +383,35 @@ const Index = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-16 gradient-cta">
+        {/* CTA Section - Updated with gradient background and proper styling */}
+        <section className="py-16 px-4 md:px-8 lg:px-16">
           <div className="container-custom">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-2">
-                  Struggling To Find The Right IT Solutions?
-                </h2>
-                <p className="text-primary-foreground/80">
-                  We'll Help You Connect With The Right Talent And Technology Partners For Your Business Needs.
-                </p>
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              className="rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
+              style={{ 
+                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
+              }}
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                    Struggling To Find The Right IT Solutions?
+                  </h2>
+                  <p className="text-white/80">
+                    We'll Help You Connect With The Right Talent And Technology Partners For Your Business Needs.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4">
+                  <Button asChild variant="secondary" size="lg" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
+                    <Link to="/contact">Schedule a Consultation</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white hover:bg-white/10 hover:text-white">
+                    <Link to="/jobs">Browse Opportunities</Link>
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-4">
-                <Button asChild variant="secondary" size="lg" className="rounded-full px-8">
-                  <Link to="/contact">Schedule a Consultation</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
-                  <Link to="/jobs">Browse Opportunities</Link>
-                </Button>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       </PageTransition>

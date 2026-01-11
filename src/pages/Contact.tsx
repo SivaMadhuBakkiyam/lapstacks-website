@@ -44,7 +44,7 @@ const Contact = () => {
               <span className="inline-block text-primary text-sm font-semibold uppercase tracking-wider mb-4">
                 Contact Us
               </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
                 Get in Touch
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -60,7 +60,7 @@ const Contact = () => {
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Form */}
               <SlideInLeft>
-                <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
+                <h2 className="text-2xl font-bold mb-6 text-foreground">Send us a Message</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <motion.div whileFocus={{ scale: 1.02 }}>
@@ -128,7 +128,7 @@ const Contact = () => {
               <SlideInRight>
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-foreground">Contact Information</h2>
                     <div className="space-y-6">
                       <motion.div 
                         whileHover={{ x: 5 }}
@@ -138,7 +138,7 @@ const Contact = () => {
                           <MapPin className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold mb-1">Office Address</h3>
+                          <h3 className="font-semibold mb-1 text-foreground">Office Address</h3>
                           <p className="text-muted-foreground">
                             DHWARCO BUSINESS CENTER<br />
                             21-B, 5th Cross St, South Phase<br />
@@ -156,7 +156,7 @@ const Contact = () => {
                           <Phone className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold mb-1">Phone</h3>
+                          <h3 className="font-semibold mb-1 text-foreground">Phone</h3>
                           <p className="text-muted-foreground">+234 (9013 - 4173 - 48)</p>
                         </div>
                       </motion.div>
@@ -169,7 +169,7 @@ const Contact = () => {
                           <Mail className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold mb-1">Email</h3>
+                          <h3 className="font-semibold mb-1 text-foreground">Email</h3>
                           <p className="text-muted-foreground">Info@Lamstacks.Com</p>
                         </div>
                       </motion.div>
@@ -182,7 +182,7 @@ const Contact = () => {
                           <Clock className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold mb-1">Business Hours</h3>
+                          <h3 className="font-semibold mb-1 text-foreground">Business Hours</h3>
                           <p className="text-muted-foreground">
                             Monday - Friday: 9:00 AM - 6:00 PM<br />
                             Saturday - Sunday: Closed

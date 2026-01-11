@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { MapPin, Briefcase, Calendar, Users, Share2, Upload, X, Check } from "lucide-react";
@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Layout from "@/components/layout/Layout";
+import { LightHeroBackground } from "@/components/common/HeroBackground";
+import { ShareJobModal } from "@/components/modals/ShareJobModal";
 
 const jobData = {
   id: 1,
@@ -55,6 +57,8 @@ const JobDescription = () => {
   const { id } = useParams();
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -64,6 +68,14 @@ const JobDescription = () => {
     coverLetter: ""
   });
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 200);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsApplyModalOpen(false);
@@ -72,14 +84,43 @@ const JobDescription = () => {
 
   return (
     <Layout>
+      {/* Sticky Header */}
+      <AnimatePresence>
+        {isScrolled && (
+          <motion.div
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            className="fixed top-20 left-0 right-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-sm"
+          >
+            <div className="container-custom py-3 flex items-center justify-between">
+              <div>
+                <h2 className="font-bold text-foreground">{jobData.title}</h2>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span>{jobData.location}</span>
+                  <span>•</span>
+                  <span>{jobData.experience}</span>
+                </div>
+              </div>
+              <Button
+                onClick={() => setIsApplyModalOpen(true)}
+                className="bg-primary hover:bg-primary/90 rounded-full px-6"
+              >
+                Apply Now
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Job Header */}
-      <section className="gradient-diagonal relative">
-        <div className="container-custom py-12">
+      <LightHeroBackground className="py-12">
+        <div className="container-custom relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">{jobData.title}</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-foreground">{jobData.title}</h1>
             <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
               <span className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
@@ -117,7 +158,7 @@ const JobDescription = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute top-12 right-8 hidden lg:flex items-center gap-4"
+            className="absolute top-0 right-0 hidden lg:flex items-center gap-4"
           >
             <Button
               onClick={() => setIsApplyModalOpen(true)}
@@ -126,13 +167,16 @@ const JobDescription = () => {
             >
               Apply Now
             </Button>
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+            <button 
+              onClick={() => setIsShareModalOpen(true)}
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
               <Share2 className="w-5 h-5" />
               Share Job
             </button>
           </motion.div>
         </div>
-      </section>
+      </LightHeroBackground>
 
       {/* Job Content */}
       <section className="py-12">
@@ -146,12 +190,12 @@ const JobDescription = () => {
             >
               <div className="bg-card border border-border rounded-xl p-8 space-y-8">
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Job description</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Job description</h2>
                   <p className="text-muted-foreground whitespace-pre-line">{jobData.description}</p>
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Requirements</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Requirements</h2>
                   <ul className="space-y-3">
                     {jobData.requirements.map((req, i) => (
                       <li key={i} className="flex gap-3 text-muted-foreground">
@@ -163,7 +207,7 @@ const JobDescription = () => {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Responsibilities</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Responsibilities</h2>
                   <ul className="space-y-3">
                     {jobData.responsibilities.map((resp, i) => (
                       <li key={i} className="flex gap-3 text-muted-foreground">
@@ -175,12 +219,12 @@ const JobDescription = () => {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Qualifications and Experience</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Qualifications and Experience</h2>
                   <p className="text-muted-foreground">{jobData.qualifications}</p>
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Key Skills</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Key Skills</h2>
                   <div className="flex flex-wrap gap-2">
                     {jobData.skills.map((skill) => (
                       <span key={skill} className="badge-gray">
@@ -191,7 +235,7 @@ const JobDescription = () => {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Benefit & Perks</h2>
+                  <h2 className="text-xl font-bold mb-4 text-foreground">Benefit & Perks</h2>
                   <div className="flex flex-wrap gap-4">
                     {jobData.perks.map((perk) => (
                       <span key={perk} className="flex items-center gap-2 text-muted-foreground">
@@ -212,9 +256,23 @@ const JobDescription = () => {
                 >
                   Apply Now
                 </Button>
-                <button className="p-3 border border-border rounded-full hover:bg-muted transition-colors">
+                <button 
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="p-3 border border-border rounded-full hover:bg-muted transition-colors"
+                >
                   <Share2 className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* Bottom Apply Button */}
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => setIsApplyModalOpen(true)}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 rounded-full px-12"
+                >
+                  Apply for this Job
+                </Button>
               </div>
             </motion.div>
 
@@ -233,7 +291,7 @@ const JobDescription = () => {
                     to={`/jobs/${job.id}`}
                     className="block bg-card border border-border rounded-xl p-4 hover:shadow-md transition-shadow"
                   >
-                    <h4 className="font-semibold mb-2">{job.title}</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{job.title}</h4>
                     <div className="flex flex-wrap gap-2 mb-2">
                       {job.tags.map((tag) => (
                         <span key={tag} className={`text-xs ${getTagColor(tag)}`}>
@@ -294,7 +352,7 @@ const JobDescription = () => {
                 <label className="text-sm font-medium mb-2 block">Email</label>
                 <Input
                   type="email"
-                  placeholder="Full name"
+                  placeholder="Email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -305,7 +363,7 @@ const JobDescription = () => {
               <div>
                 <label className="text-sm font-medium mb-2 block">Phone</label>
                 <Input
-                  placeholder="Full name"
+                  placeholder="Phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 />
@@ -350,18 +408,26 @@ const JobDescription = () => {
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
         <DialogContent className="sm:max-w-md text-center">
           <div className="py-8">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
               <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center">
-                <Check className="w-6 h-6 text-primary-foreground" />
+                <Check className="w-6 h-6 text-white" />
               </div>
             </div>
-            <h2 className="text-xl font-bold mb-2">Thank you for your application!</h2>
+            <h2 className="text-xl font-bold mb-2 text-foreground">Thank you for your application!</h2>
             <p className="text-muted-foreground">
               We've received it successfully. If there's a good fit, someone from our team will be in touch with you soon.
             </p>
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Share Modal */}
+      <ShareJobModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        jobTitle={jobData.title}
+        jobId={id || "1"}
+      />
     </Layout>
   );
 };

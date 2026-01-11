@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Briefcase, ChevronDown } from "lucide-react";
+import { Search, MapPin, Briefcase, ChevronDown, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,6 +9,7 @@ import Layout from "@/components/layout/Layout";
 import { LightHeroBackground } from "@/components/common/HeroBackground";
 import { PageTransition, FadeInSection, StaggerContainer, StaggerItem } from "@/components/animations/PageTransition";
 import { useJobSearch } from "@/hooks/useJobSearch";
+import { ShareJobModal } from "@/components/modals/ShareJobModal";
 
 const jobTypes = ["Full-time", "Internship", "Contract", "Freelance"];
 const workModes = ["On-site", "Hybrid", "Remote"];
@@ -51,14 +53,22 @@ const Jobs = () => {
     totalJobs
   } = useJobSearch();
 
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<{ title: string; id: string } | null>(null);
+
+  const handleShare = (job: { title: string; id: string }) => {
+    setSelectedJob(job);
+    setShareModalOpen(true);
+  };
+
   return (
     <Layout>
       <PageTransition>
-        {/* Hero Section */}
+        {/* Hero Section with subpage background */}
         <LightHeroBackground className="py-16">
           <div className="container-custom text-center">
             <FadeInSection>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
                 Find Your Dream Opportunity
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
@@ -230,8 +240,8 @@ const Jobs = () => {
                 </div>
               </motion.div>
 
-              {/* Job Listings */}
-              <div className="lg:col-span-3 space-y-4">
+              {/* Job Listings - Fixed spacing */}
+              <div className="lg:col-span-3 space-y-6">
                 <StaggerContainer>
                   {jobs.length === 0 ? (
                     <div className="text-center py-12 bg-card rounded-xl border border-border">
@@ -249,7 +259,7 @@ const Jobs = () => {
                         >
                           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="space-y-2">
-                              <h3 className="text-lg font-bold">{job.title}</h3>
+                              <h3 className="text-lg font-bold text-foreground">{job.title}</h3>
                               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                   <MapPin className="w-4 h-4" />
@@ -270,12 +280,21 @@ const Jobs = () => {
                               </div>
                             </div>
                             <div className="flex flex-col items-end gap-2">
-                              <Link
-                                to={`/jobs/${job.id}`}
-                                className="text-primary font-medium hover:underline"
-                              >
-                                View Details
-                              </Link>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  onClick={() => handleShare({ title: job.title, id: job.id.toString() })}
+                                  className="p-2 hover:bg-muted rounded-full transition-colors"
+                                  aria-label="Share job"
+                                >
+                                  <Share2 className="w-5 h-5 text-muted-foreground hover:text-primary" />
+                                </button>
+                                <Link
+                                  to={`/jobs/${job.id}`}
+                                  className="text-primary font-medium hover:underline"
+                                >
+                                  View Details
+                                </Link>
+                              </div>
                               <span className="text-xs text-muted-foreground">{job.posted}</span>
                             </div>
                           </div>
@@ -311,6 +330,16 @@ const Jobs = () => {
           </div>
         </section>
       </PageTransition>
+
+      {/* Share Modal */}
+      {selectedJob && (
+        <ShareJobModal
+          isOpen={shareModalOpen}
+          onClose={() => setShareModalOpen(false)}
+          jobTitle={selectedJob.title}
+          jobId={selectedJob.id}
+        />
+      )}
     </Layout>
   );
 };

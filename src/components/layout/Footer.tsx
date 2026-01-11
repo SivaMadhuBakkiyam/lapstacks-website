@@ -9,10 +9,11 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">L</span>
-              </div>
-              <span className="text-xl font-bold">lamstacks</span>
+              <img 
+                src="/images/Lampstacks-logo.svg" 
+                alt="Lamstacks" 
+                className="h-8 w-auto brightness-0 invert"
+              />
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed">
               We provide exceptional IT services with expertise in DevOps, IT Consulting, Mobile App Development, and Digital Transformation. Building the future, one solution at a time.
@@ -20,15 +21,41 @@ const Footer = () => {
             <div>
               <h4 className="font-semibold mb-3">Social Media</h4>
               <div className="flex gap-4">
-                {[Linkedin, Twitter, Facebook, Instagram, Youtube].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors"
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                ))}
+                <a
+                  href="#"
+                  className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-4 h-4 text-white" />
+                </a>
+                <a
+                  href="#"
+                  className="w-8 h-8 rounded-full bg-[#1DA1F2] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-4 h-4 text-white" />
+                </a>
+                <a
+                  href="#"
+                  className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-4 h-4 text-white" />
+                </a>
+                <a
+                  href="#"
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-4 h-4 text-white" />
+                </a>
+                <a
+                  href="#"
+                  className="w-8 h-8 rounded-full bg-[#FF0000] flex items-center justify-center hover:opacity-80 transition-opacity"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-4 h-4 text-white" />
+                </a>
               </div>
             </div>
           </div>

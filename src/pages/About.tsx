@@ -58,51 +58,57 @@ const teamMembers = [
     name: "Olivia Rhye", 
     role: "Founder & CEO", 
     image: teamMember1,
-    hoverImage: teamMember2 // Simulating GIF with different image
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Phoenix Baker", 
     role: "Engineering Manager", 
     image: teamMember2,
-    hoverImage: teamMember1
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Lana Steiner", 
     role: "Product Manager", 
     image: teamMember3,
-    hoverImage: teamMember4
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Demi Wilkinson", 
     role: "Frontend Developer", 
     image: teamMember4,
-    hoverImage: teamMember3
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Candice Wu", 
     role: "Backend Developer", 
     image: teamMember1,
-    hoverImage: teamMember2
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Natali Craig", 
     role: "Product Designer", 
     image: teamMember3,
-    hoverImage: teamMember1
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "Drew Cano", 
     role: "UX Researcher", 
     image: teamMember2,
-    hoverImage: teamMember4
+    gifUrl: "https://media.tenor.com/baIfiNZMfXEAAAAi/enjoy-liam-scott-edwards.gif"
   },
   { 
     name: "You?", 
     role: "Join Our Team", 
     image: "",
-    hoverImage: "",
+    gifUrl: "",
     isPlaceholder: true
   }
+];
+
+// Gallery images for team photos
+const galleryImages = [
+  teamMember1, teamMember2, teamMember3, teamMember4,
+  officeImage, teamMember1, teamMember3, teamMember2
 ];
 
 const TeamCard = ({ member, index }: { member: typeof teamMembers[0]; index: number }) => {
@@ -146,7 +152,7 @@ const TeamCard = ({ member, index }: { member: typeof teamMembers[0]; index: num
     >
       <div className="relative overflow-hidden rounded-2xl mb-4">
         <motion.img
-          src={isHovered ? member.hoverImage : member.image}
+          src={isHovered ? member.gifUrl : member.image}
           alt={member.name}
           className="w-full aspect-square object-cover"
           initial={false}
@@ -159,13 +165,13 @@ const TeamCard = ({ member, index }: { member: typeof teamMembers[0]; index: num
           animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="text-primary-foreground text-center">
+          <div className="text-white text-center">
             <p className="font-bold">{member.name}</p>
             <p className="text-sm opacity-90">{member.role}</p>
           </div>
         </motion.div>
       </div>
-      <h3 className="font-bold">{member.name}</h3>
+      <h3 className="font-bold text-foreground">{member.name}</h3>
       <p className="text-sm text-muted-foreground">{member.role}</p>
     </motion.div>
   );
@@ -175,20 +181,25 @@ const About = () => {
   return (
     <Layout>
       <PageTransition>
-        {/* Hero Section */}
+        {/* Hero Section - Fixed to match design */}
         <LightHeroBackground className="py-16 md:py-24">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-12">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                  About Excellence at <span className="text-gradient">Lamstacks</span>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
+                  About Excellence at <span className="text-primary">Lamstacks</span>
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   Building Scalable Technology. Delivering Measurable Impact.
                 </p>
               </div>
             </FadeInSection>
+          </div>
+        </LightHeroBackground>
 
+        {/* About Content */}
+        <section className="section-padding">
+          <div className="container-custom">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <FadeInSection delay={0.1}>
                 <div>
@@ -221,20 +232,20 @@ const About = () => {
               </div>
             </FadeInSection>
           </div>
-        </LightHeroBackground>
+        </section>
 
         {/* Mission & Vision */}
-        <section className="section-padding">
+        <section className="section-padding bg-muted/30 dark:bg-muted/10">
           <div className="container-custom">
             <StaggerContainer>
               <div className="grid md:grid-cols-2 gap-8">
                 <StaggerItem>
                   <motion.div
                     whileHover={{ y: -5 }}
-                    className="bg-primary/5 rounded-2xl p-8"
+                    className="bg-card rounded-2xl p-8 border border-border"
                   >
                     <Target className="w-10 h-10 text-primary mb-4" />
-                    <h3 className="text-xl font-bold mb-4">Our Mission to Empower Transformation</h3>
+                    <h3 className="text-xl font-bold mb-4 text-foreground">Our Mission to Empower Transformation</h3>
                     <p className="text-muted-foreground">
                       To empower businesses worldwide with innovative IT, AI, and automation solutions – delivering scalable, secure, and intelligent digital experiences that drive measurable impact.
                     </p>
@@ -243,10 +254,10 @@ const About = () => {
                 <StaggerItem>
                   <motion.div
                     whileHover={{ y: -5 }}
-                    className="bg-primary/5 rounded-2xl p-8"
+                    className="bg-card rounded-2xl p-8 border border-border"
                   >
                     <Eye className="w-10 h-10 text-primary mb-4" />
-                    <h3 className="text-xl font-bold mb-4">Our Vision for a Smarter Tomorrow</h3>
+                    <h3 className="text-xl font-bold mb-4 text-foreground">Our Vision for a Smarter Tomorrow</h3>
                     <p className="text-muted-foreground">
                       To be a global leader in technology innovation, shaping the future of digital transformation through smart systems, human-centric design, and next-gen AI.
                     </p>
@@ -257,16 +268,65 @@ const About = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="section-padding bg-foreground text-primary-foreground">
+        {/* Team Gallery Section */}
+        <section className="section-padding">
           <div className="container-custom">
             <FadeInSection>
+              <div className="text-center mb-12">
+                <span className="text-primary text-sm font-semibold uppercase tracking-wider">Gallery</span>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 text-foreground">Team Moments</h2>
+                <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+                  Glimpses of our team culture, collaboration, and celebrations
+                </p>
+              </div>
+            </FadeInSection>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {galleryImages.map((img, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ scale: 1.05, zIndex: 10 }}
+                  className={`overflow-hidden rounded-xl ${
+                    index === 0 || index === 7 ? "md:col-span-2 md:row-span-2" : ""
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`Gallery ${index + 1}`}
+                    className="w-full h-full object-cover aspect-square"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section 
+          className="section-padding relative overflow-hidden"
+          style={{ backgroundColor: "#EDF5F4" }}
+        >
+          {/* Globe Map Background */}
+          <div 
+            className="absolute inset-0 opacity-10 bg-center bg-no-repeat bg-contain"
+            style={{ 
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cellipse cx='400' cy='200' rx='350' ry='180' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cellipse cx='400' cy='200' rx='350' ry='80' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M50 200 Q400 50 750 200 Q400 350 50 200' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M400 20 Q550 200 400 380 Q250 200 400 20' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E")`
+            }}
+          />
+          <div className="container-custom relative z-10">
+            <FadeInSection>
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                   Built in India, trusted worldwide
                 </h2>
-                <p className="text-primary mt-2 text-xl font-semibold">we're here 24/7 support.</p>
-                <p className="mt-4 text-gray-400 max-w-xl mx-auto">
+                <p className="mt-2 text-xl font-semibold bg-gradient-to-r from-primary via-brand-purple to-brand-green bg-clip-text text-transparent">
+                  we're here 24/7 support.
+                </p>
+                <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
                   The core values and principles that drive us to deliver excellence across continents
                 </p>
               </div>
@@ -279,7 +339,7 @@ const About = () => {
                     <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                       <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={2000} />
                     </div>
-                    <div className="text-gray-400">{stat.label}</div>
+                    <div className="text-muted-foreground">{stat.label}</div>
                   </div>
                 </FadeInSection>
               ))}
@@ -288,12 +348,12 @@ const About = () => {
         </section>
 
         {/* Values Section */}
-        <section className="section-padding">
+        <section className="section-padding bg-background">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-16">
                 <span className="text-primary text-sm font-semibold uppercase tracking-wider">The Lamstacks Promises</span>
-                <h2 className="text-3xl md:text-4xl font-bold mt-2">Our Core Values</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 text-foreground">Our Core Values</h2>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
                   Our values define who we are, how we work, and the standards we uphold in everything we deliver
                 </p>
@@ -311,7 +371,7 @@ const About = () => {
                       <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                         <value.icon className="w-6 h-6 text-primary" />
                       </div>
-                      <h3 className="text-lg font-bold mb-2">{value.title}</h3>
+                      <h3 className="text-lg font-bold mb-2 text-foreground">{value.title}</h3>
                       <p className="text-muted-foreground text-sm">{value.description}</p>
                     </motion.div>
                   </StaggerItem>
@@ -321,13 +381,13 @@ const About = () => {
           </div>
         </section>
 
-        {/* Team Gallery Section */}
-        <section className="section-padding bg-muted/30">
+        {/* Team Section */}
+        <section className="section-padding bg-muted/30 dark:bg-muted/10">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-16">
                 <span className="text-primary text-sm font-semibold uppercase tracking-wider">Our Team</span>
-                <h2 className="text-3xl md:text-4xl font-bold mt-2">Meet the people behind Lamstacks</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 text-foreground">Meet the people behind Lamstacks</h2>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
                   The talented individuals driving innovation and excellence. Hover over photos to see them in action!
                 </p>
@@ -343,17 +403,25 @@ const About = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-16 gradient-cta">
-          <div className="container-custom text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
-              Want to Join Our Team?
-            </h2>
-            <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
-              We're always looking for talented individuals to join our growing team.
-            </p>
-            <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
-              <Link to="/jobs">View Open Positions</Link>
-            </Button>
+        <section className="py-16 px-4 md:px-8 lg:px-16">
+          <div className="container-custom">
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              className="rounded-3xl p-8 md:p-12 text-center"
+              style={{ 
+                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
+              }}
+            >
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Want to Join Our Team?
+              </h2>
+              <p className="text-white/80 max-w-xl mx-auto mb-8">
+                We're always looking for talented individuals to join our growing team.
+              </p>
+              <Button asChild size="lg" variant="secondary" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
+                <Link to="/jobs">View Open Positions</Link>
+              </Button>
+            </motion.div>
           </div>
         </section>
       </PageTransition>

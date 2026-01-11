@@ -47,7 +47,14 @@ export const HeroBackground = ({ children, className = "", showDecoration = true
 
 export const LightHeroBackground = ({ children, className = "", showDecoration = true }: HeroBackgroundProps) => {
   return (
-    <div className={`relative overflow-hidden bg-gradient-to-br from-muted/50 via-background to-muted/30 ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
+      {/* Subpage background */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/bg-subpage.svg')" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/80 via-background/90 to-purple-100/50 dark:from-background dark:via-background dark:to-purple-900/20" />
+      
       {/* Content */}
       <div className="relative z-10">
         {children}

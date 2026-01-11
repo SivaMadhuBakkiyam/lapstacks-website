@@ -30,7 +30,7 @@ const Blog = () => {
               <span className="inline-block text-primary text-sm font-semibold uppercase tracking-wider mb-4 bg-primary/10 px-4 py-1 rounded-full">
                 Our blog
               </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gradient mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
                 Resources and insights
               </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
@@ -86,7 +86,7 @@ const Blog = () => {
         <section className="section-padding">
           <div className="container-custom">
             <FadeInSection>
-              <h2 className="text-xl font-bold mb-8">Recent blog posts</h2>
+              <h2 className="text-xl font-bold mb-8 text-foreground">Recent blog posts</h2>
             </FadeInSection>
             
             {featuredPosts.length > 0 && (
@@ -106,7 +106,7 @@ const Blog = () => {
                         <span>•</span>
                         <span>{featuredPosts[0].date}</span>
                       </div>
-                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2 text-foreground">
                         {featuredPosts[0].title}
                         <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                       </h3>
@@ -138,7 +138,7 @@ const Blog = () => {
                               <span>•</span>
                               <span>{post.date}</span>
                             </div>
-                            <h3 className="font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                            <h3 className="font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2 text-foreground">
                               {post.title}
                               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </h3>
@@ -161,7 +161,7 @@ const Blog = () => {
             {allPosts.length > 0 && (
               <>
                 <FadeInSection>
-                  <h2 className="text-xl font-bold mb-8">All blog posts</h2>
+                  <h2 className="text-xl font-bold mb-8 text-foreground">All blog posts</h2>
                 </FadeInSection>
                 <StaggerContainer>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -180,7 +180,7 @@ const Blog = () => {
                               <span>•</span>
                               <span>{post.date}</span>
                             </div>
-                            <h3 className="font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                            <h3 className="font-bold mb-2 group-hover:text-primary transition-colors flex items-center gap-2 text-foreground">
                               {post.title}
                               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </h3>
