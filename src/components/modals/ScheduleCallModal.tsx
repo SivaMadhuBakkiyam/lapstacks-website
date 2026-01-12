@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Clock, Check, ArrowRight, ArrowLeft } from "lucide-react";
+import { X, Calendar, Clock, Check, ArrowRight, ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -8,6 +8,8 @@ interface ScheduleCallModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const CALENDLY_LINK = "https://calendly.com/lamstacks";
 
 const timeSlots = [
   "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
@@ -41,6 +43,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
     message: ""
   });
   const [isBooked, setIsBooked] = useState(false);
+  const [useCalendly, setUseCalendly] = useState(false);
 
   const dates = generateDates();
 
@@ -63,6 +66,19 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
       day: "numeric"
     });
   };
+
+  const openCalendly = () => {
+    window.open(CALENDLY_LINK, "_blank");
+  };
+
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setStep(1);
+      setUseCalendly(false);
+      setIsBooked(false);
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -111,11 +127,11 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.2, type: "spring" }}
-                      className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+                      className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
                     >
-                      <Check className="w-10 h-10 text-green-600" />
+                      <Check className="w-10 h-10 text-green-600 dark:text-green-400" />
                     </motion.div>
-                    <h3 className="text-2xl font-bold mb-2">Call Scheduled!</h3>
+                    <h3 className="text-2xl font-bold text-foreground mb-2">Call Scheduled!</h3>
                     <p className="text-muted-foreground">
                       We've sent a confirmation to {formData.email}
                     </p>
@@ -123,11 +139,11 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-primary" />
-                          <span>{selectedDate && formatDate(selectedDate)}</span>
+                          <span className="text-foreground">{selectedDate && formatDate(selectedDate)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-primary" />
-                          <span>{selectedTime}</span>
+                          <span className="text-foreground">{selectedTime}</span>
                         </div>
                       </div>
                     </div>
@@ -139,9 +155,36 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                   >
+                    {/* Calendly Option */}
+                    <div className="mb-6 p-4 bg-primary/5 rounded-xl border border-primary/20">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-foreground">Prefer Calendly?</h4>
+                          <p className="text-sm text-muted-foreground">Schedule directly via our Calendly</p>
+                        </div>
+                        <Button 
+                          onClick={openCalendly}
+                          variant="outline" 
+                          className="gap-2 rounded-full"
+                        >
+                          Open Calendly
+                          <ExternalLink className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="relative mb-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-border"></div>
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card px-2 text-muted-foreground">Or schedule below</span>
+                      </div>
+                    </div>
+
                     {/* Date Selection */}
                     <div className="mb-6">
-                      <h3 className="font-semibold mb-4 flex items-center gap-2">
+                      <h3 className="font-semibold mb-4 flex items-center gap-2 text-foreground">
                         <Calendar className="w-5 h-5 text-primary" />
                         Select a Date
                       </h3>
@@ -170,7 +213,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
 
                     {/* Time Selection */}
                     <div>
-                      <h3 className="font-semibold mb-4 flex items-center gap-2">
+                      <h3 className="font-semibold mb-4 flex items-center gap-2 text-foreground">
                         <Clock className="w-5 h-5 text-primary" />
                         Select a Time (IST)
                       </h3>
@@ -204,11 +247,11 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-primary" />
-                          <span>{selectedDate && formatDate(selectedDate)}</span>
+                          <span className="text-foreground">{selectedDate && formatDate(selectedDate)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
                           <Clock className="w-4 h-4 text-primary" />
-                          <span>{selectedTime}</span>
+                          <span className="text-foreground">{selectedTime}</span>
                         </div>
                       </div>
                       <button
@@ -222,7 +265,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                     {/* Form Fields */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Name *</label>
+                        <label className="text-sm font-medium mb-2 block text-foreground">Name *</label>
                         <Input
                           placeholder="John Doe"
                           value={formData.name}
@@ -231,7 +274,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Company</label>
+                        <label className="text-sm font-medium mb-2 block text-foreground">Company</label>
                         <Input
                           placeholder="Your Company"
                           value={formData.company}
@@ -240,7 +283,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Email *</label>
+                      <label className="text-sm font-medium mb-2 block text-foreground">Email *</label>
                       <Input
                         type="email"
                         placeholder="john@example.com"
@@ -250,7 +293,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Phone</label>
+                      <label className="text-sm font-medium mb-2 block text-foreground">Phone</label>
                       <Input
                         placeholder="+91 98765 43210"
                         value={formData.phone}
@@ -258,9 +301,9 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium mb-2 block">What would you like to discuss?</label>
+                      <label className="text-sm font-medium mb-2 block text-foreground">What would you like to discuss?</label>
                       <textarea
-                        className="w-full p-3 rounded-lg border border-input bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full p-3 rounded-lg border border-input bg-background text-foreground text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring"
                         rows={3}
                         placeholder="Tell us about your project or requirements..."
                         value={formData.message}

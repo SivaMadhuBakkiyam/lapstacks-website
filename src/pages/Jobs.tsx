@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Briefcase, ChevronDown, Share2 } from "lucide-react";
+import { Search, MapPin, Briefcase, ChevronDown, Share2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -64,8 +64,8 @@ const Jobs = () => {
   return (
     <Layout>
       <PageTransition>
-        {/* Hero Section with subpage background */}
-        <LightHeroBackground className="py-16">
+        {/* Hero Section with subpage background - No decoration */}
+        <LightHeroBackground className="py-16" showDecoration={false}>
           <div className="container-custom text-center">
             <FadeInSection>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
@@ -122,7 +122,7 @@ const Jobs = () => {
                 className="lg:col-span-1 space-y-8"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-lg">Filters</h3>
+                  <h3 className="font-bold text-lg text-foreground">Filters</h3>
                   <button onClick={clearFilters} className="text-primary text-sm font-medium hover:underline">
                     Clear All
                   </button>
@@ -132,7 +132,7 @@ const Jobs = () => {
                 <div className="space-y-4">
                   <h4 className="font-semibold text-sm text-muted-foreground">Date Post</h4>
                   <div className="flex items-center justify-between p-3 bg-muted rounded-lg cursor-pointer hover:bg-muted/80 transition-colors">
-                    <span>Anytime</span>
+                    <span className="text-foreground">Anytime</span>
                     <ChevronDown className="w-4 h-4" />
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const Jobs = () => {
                             }
                           }}
                         />
-                        <span className="text-sm group-hover:text-primary transition-colors">{type}</span>
+                        <span className="text-sm text-foreground group-hover:text-primary transition-colors">{type}</span>
                       </label>
                     ))}
                   </div>
@@ -175,7 +175,7 @@ const Jobs = () => {
                             }
                           }}
                         />
-                        <span className="text-sm group-hover:text-primary transition-colors">{mode}</span>
+                        <span className="text-sm text-foreground group-hover:text-primary transition-colors">{mode}</span>
                       </label>
                     ))}
                   </div>
@@ -202,7 +202,7 @@ const Jobs = () => {
                               }
                             }}
                           />
-                          <span className="text-sm group-hover:text-primary transition-colors">{loc.name}</span>
+                          <span className="text-sm text-foreground group-hover:text-primary transition-colors">{loc.name}</span>
                         </div>
                         <span className="text-xs text-muted-foreground">({loc.count})</span>
                       </label>
@@ -231,7 +231,7 @@ const Jobs = () => {
                               }
                             }}
                           />
-                          <span className="text-sm group-hover:text-primary transition-colors">{ind.name}</span>
+                          <span className="text-sm text-foreground group-hover:text-primary transition-colors">{ind.name}</span>
                         </div>
                         <span className="text-xs text-muted-foreground">({ind.count})</span>
                       </label>
@@ -240,90 +240,99 @@ const Jobs = () => {
                 </div>
               </motion.div>
 
-              {/* Job Listings - Fixed spacing */}
-              <div className="lg:col-span-3 space-y-6">
+              {/* Job Listings - Fixed spacing with gap between cards */}
+              <div className="lg:col-span-3">
                 <StaggerContainer>
-                  {jobs.length === 0 ? (
-                    <div className="text-center py-12 bg-card rounded-xl border border-border">
-                      <p className="text-muted-foreground">No jobs found matching your criteria.</p>
-                      <Button onClick={clearFilters} variant="link" className="mt-2">
-                        Clear filters
-                      </Button>
-                    </div>
-                  ) : (
-                    jobs.map((job) => (
-                      <StaggerItem key={job.id}>
-                        <motion.div
-                          whileHover={{ scale: 1.01, x: 5 }}
-                          className="bg-card border border-border rounded-xl p-6 hover:shadow-md transition-all"
-                        >
-                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="space-y-2">
-                              <h3 className="text-lg font-bold text-foreground">{job.title}</h3>
-                              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                                <span className="flex items-center gap-1">
-                                  <MapPin className="w-4 h-4" />
-                                  {job.location}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Briefcase className="w-4 h-4" />
-                                  {job.experience}
-                                </span>
-                                <span>$ {job.salary}</span>
-                              </div>
-                              <div className="flex flex-wrap gap-2 pt-2">
-                                {job.tags.map((tag) => (
-                                  <span key={tag} className={getTagColor(tag)}>
-                                    {tag}
+                  <div className="space-y-4">
+                    {jobs.length === 0 ? (
+                      <div className="text-center py-12 bg-card rounded-xl border border-border">
+                        <p className="text-muted-foreground">No jobs found matching your criteria.</p>
+                        <Button onClick={clearFilters} variant="link" className="mt-2">
+                          Clear filters
+                        </Button>
+                      </div>
+                    ) : (
+                      jobs.map((job) => (
+                        <StaggerItem key={job.id}>
+                          <motion.div
+                            whileHover={{ scale: 1.01, x: 5 }}
+                            className="bg-card border border-border rounded-xl p-6 hover:shadow-md transition-all"
+                          >
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                              <div className="space-y-2 flex-1">
+                                <h3 className="text-lg font-bold text-foreground">{job.title}</h3>
+                                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                                  <span className="flex items-center gap-1">
+                                    <MapPin className="w-4 h-4" />
+                                    {job.location}
                                   </span>
-                                ))}
+                                  <span className="flex items-center gap-1">
+                                    <Briefcase className="w-4 h-4" />
+                                    {job.experience}
+                                  </span>
+                                  <span>$ {job.salary}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 pt-2">
+                                  {job.tags.map((tag) => (
+                                    <span key={tag} className={getTagColor(tag)}>
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex flex-col items-end gap-2">
-                              <div className="flex items-center gap-3">
-                                <button
-                                  onClick={() => handleShare({ title: job.title, id: job.id.toString() })}
-                                  className="p-2 hover:bg-muted rounded-full transition-colors"
-                                  aria-label="Share job"
-                                >
-                                  <Share2 className="w-5 h-5 text-muted-foreground hover:text-primary" />
-                                </button>
+                              <div className="flex flex-col items-end gap-3">
                                 <Link
                                   to={`/jobs/${job.id}`}
                                   className="text-primary font-medium hover:underline"
                                 >
                                   View Details
                                 </Link>
+                                {/* Share and Time below View Details */}
+                                <div className="flex items-center gap-3 text-muted-foreground">
+                                  <button
+                                    onClick={() => handleShare({ title: job.title, id: job.id.toString() })}
+                                    className="p-1.5 hover:bg-muted rounded-full transition-colors"
+                                    aria-label="Share job"
+                                  >
+                                    <Share2 className="w-4 h-4 hover:text-primary" />
+                                  </button>
+                                  <span className="flex items-center gap-1 text-xs">
+                                    <Clock className="w-3 h-3" />
+                                    {job.posted}
+                                  </span>
+                                </div>
                               </div>
-                              <span className="text-xs text-muted-foreground">{job.posted}</span>
                             </div>
-                          </div>
-                        </motion.div>
-                      </StaggerItem>
-                    ))
-                  )}
+                          </motion.div>
+                        </StaggerItem>
+                      ))
+                    )}
+                  </div>
                 </StaggerContainer>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Post Jobs CTA */}
-        <section className="py-16">
+        {/* Post Jobs CTA - Same gradient as home page */}
+        <section className="py-16 px-4 md:px-8 lg:px-16">
           <div className="container-custom">
             <motion.div 
               whileHover={{ scale: 1.01 }}
-              className="gradient-cta rounded-3xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8"
+              className="rounded-3xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8"
+              style={{ 
+                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
+              }}
             >
-              <div className="text-primary-foreground">
+              <div className="text-white">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
                   Post Your Jobs<br />& Internships
                 </h2>
-                <p className="text-primary-foreground/80 max-w-md">
+                <p className="text-white/80 max-w-md">
                   Find the right candidate from a diverse talent pool for your role.
                 </p>
               </div>
-              <Button asChild variant="secondary" size="lg" className="rounded-full px-8">
+              <Button asChild variant="secondary" size="lg" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
                 <Link to="/contact">Post Jobs Now</Link>
               </Button>
             </motion.div>

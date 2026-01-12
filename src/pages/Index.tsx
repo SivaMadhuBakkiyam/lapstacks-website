@@ -70,29 +70,7 @@ const Index = () => {
   return (
     <Layout>
       <PageTransition>
-        {/* HRMA Announcement Card - Moved to TOP before header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center py-4 bg-transparent"
-        >
-          <motion.div 
-            animate={{ 
-              boxShadow: [
-                "0 0 20px rgba(139, 92, 246, 0.3)",
-                "0 0 40px rgba(139, 92, 246, 0.5)",
-                "0 0 20px rgba(139, 92, 246, 0.3)"
-              ]
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="inline-flex items-center gap-3 px-6 py-3 bg-transparent border border-purple-400/50 rounded-full backdrop-blur-sm"
-          >
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            <span className="text-purple-300 font-medium">New: Our HRMA Product Launch Soon</span>
-          </motion.div>
-        </motion.div>
-
-        {/* Announcement Bar */}
+        {/* Announcement Bar - First */}
         <div className="bg-primary py-2 text-center">
           <p className="text-primary-foreground text-sm">
             Big news — a better HR experience is on the way with our upcoming HRMA launch.
@@ -100,8 +78,30 @@ const Index = () => {
         </div>
 
         {/* Hero Section */}
-        <HeroBackground className="py-16 md:py-24">
+        <HeroBackground className="py-16 md:py-24" showDecoration={false}>
           <div className="container-custom">
+            {/* HRMA Chip - Now inside hero, before heading */}
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6"
+            >
+              <motion.div 
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px rgba(139, 92, 246, 0.3)",
+                    "0 0 40px rgba(139, 92, 246, 0.5)",
+                    "0 0 20px rgba(139, 92, 246, 0.3)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 border border-purple-400/50 rounded-full backdrop-blur-sm"
+              >
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-300 text-sm font-medium">New: Our HRMA Product Launch Soon</span>
+              </motion.div>
+            </motion.div>
+
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div
                 initial="initial"
@@ -122,7 +122,7 @@ const Index = () => {
                   <Button asChild size="lg" className="bg-primary hover:bg-primary/90 rounded-full px-8">
                     <Link to="/jobs">Find Talent or Jobs</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white/50 text-white hover:bg-white/10 hover:text-white">
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white bg-transparent hover:bg-white/10">
                     <Link to="/services">Browse Opportunities</Link>
                   </Button>
                 </motion.div>
@@ -139,45 +139,47 @@ const Index = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Service Cards - Transparent Background */}
+              {/* Service Cards - With transparent container background */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="space-y-4"
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20"
               >
-                {[
-                  { title: "Staff Recruitment", desc: "Pre-vetted tech professionals matched to your business needs.", icon: Users },
-                  { title: "DevOps", desc: "Automated CI/CD pipelines for faster, reliable software delivery.", icon: Server },
-                  { title: "Cloud Migration", desc: "Securely move applications and data to scalable cloud platforms.", icon: Cloud },
-                  { title: "AI Services", desc: "Smart AI solutions to automate, analyze, and optimize operations.", icon: Cpu }
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + i * 0.1 }}
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    className="flex items-center gap-4 p-4 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 hover:shadow-md transition-all cursor-pointer group"
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <item.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-foreground">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.desc}</p>
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                  </motion.div>
-                ))}
+                <div className="space-y-3">
+                  {[
+                    { title: "Staff Recruitment", desc: "Pre-vetted tech professionals matched to your business needs.", icon: Users },
+                    { title: "DevOps", desc: "Automated CI/CD pipelines for faster, reliable software delivery.", icon: Server },
+                    { title: "Cloud Migration", desc: "Securely move applications and data to scalable cloud platforms.", icon: Cloud },
+                    { title: "AI Services", desc: "Smart AI solutions to automate, analyze, and optimize operations.", icon: Cpu }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + i * 0.1 }}
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      className="flex items-center gap-4 p-4 bg-white dark:bg-card rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground">{item.title}</h3>
+                        <p className="text-sm text-muted-foreground truncate">{item.desc}</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </div>
         </HeroBackground>
 
-        {/* Video Section - Updated with bg.svg */}
+        {/* Video Section - Touching hero section */}
         <FadeInSection>
-          <section className="py-8 md:py-12 px-4 md:px-8 lg:px-16">
+          <section className="-mt-8 md:-mt-12 relative z-20 px-4 md:px-8 lg:px-16">
             <div 
               className="relative h-[300px] md:h-[350px] w-full overflow-hidden rounded-3xl"
               style={{ backgroundImage: "url('/images/bg.svg')", backgroundSize: "cover", backgroundPosition: "center" }}
@@ -210,7 +212,7 @@ const Index = () => {
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
                   whileHover={{ scale: 1.1 }}
-                  className="absolute right-8 md:right-16 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg"
                 >
                   <Play className="w-6 h-6 text-primary ml-1" />
                 </motion.button>
@@ -219,7 +221,7 @@ const Index = () => {
           </section>
         </FadeInSection>
 
-        {/* Services Section - Updated with #F2FFF7 background */}
+        {/* Services Section - Background #F2FFF7 */}
         <section className="section-padding" style={{ backgroundColor: "#F2FFF7" }}>
           <div className="container-custom">
             <FadeInSection>
@@ -268,7 +270,7 @@ const Index = () => {
             <FadeInSection>
               <div className="text-center mb-16">
                 <span className="text-primary text-sm font-semibold uppercase tracking-wider">Testimonials</span>
-                <h2 className="text-3xl md:text-4xl font-bold mt-2">What Our Clients Say</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mt-2 text-foreground">What Our Clients Say</h2>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
                   Real experiences from companies that have transformed their teams and technology with LamStacks
                 </p>
@@ -311,29 +313,30 @@ const Index = () => {
               </motion.div>
             </FadeInSection>
 
-            <div className="flex justify-center gap-4 mt-8">
+            {/* Improved testimonial navigation */}
+            <div className="flex justify-center items-center gap-6 mt-8">
               <motion.button 
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, x: -3 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                className="w-12 h-12 rounded-full border-2 border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
               </motion.button>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-3 items-center">
                 {[0, 1, 2, 3, 4].map((i) => (
                   <motion.div
                     key={i}
-                    whileHover={{ scale: 1.2 }}
-                    className={`w-2.5 h-2.5 rounded-full transition-colors cursor-pointer ${
-                      i === 0 ? "bg-primary" : "bg-muted-foreground/30 hover:bg-primary/50"
+                    whileHover={{ scale: 1.3 }}
+                    className={`rounded-full transition-all cursor-pointer ${
+                      i === 0 ? "w-8 h-3 bg-primary" : "w-3 h-3 bg-muted-foreground/30 hover:bg-primary/50"
                     }`}
                   />
                 ))}
               </div>
               <motion.button 
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, x: 3 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                className="w-12 h-12 rounded-full border-2 border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all"
               >
                 <ChevronRight className="w-5 h-5" />
               </motion.button>
@@ -341,16 +344,18 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats Section - Updated with #EDF5F4 background and globe map */}
+        {/* Stats Section - Background #EDF5F4 with map.svg */}
         <section 
           className="section-padding relative overflow-hidden"
           style={{ backgroundColor: "#EDF5F4" }}
         >
           {/* Globe Map Background */}
           <div 
-            className="absolute inset-0 opacity-10 bg-center bg-no-repeat bg-contain"
+            className="absolute inset-0 opacity-20 bg-center bg-no-repeat"
             style={{ 
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cellipse cx='400' cy='200' rx='350' ry='180' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cellipse cx='400' cy='200' rx='350' ry='80' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M50 200 Q400 50 750 200 Q400 350 50 200' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M400 20 Q550 200 400 380 Q250 200 400 20' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E")`
+              backgroundImage: "url('/images/map.svg')",
+              backgroundSize: "80%",
+              backgroundPosition: "center"
             }}
           />
           <div className="container-custom relative z-10">
@@ -383,14 +388,15 @@ const Index = () => {
           </div>
         </section>
 
-        {/* CTA Section - Updated with gradient background and proper styling */}
+        {/* CTA Section */}
         <section className="py-16 px-4 md:px-8 lg:px-16">
           <div className="container-custom">
             <motion.div 
               whileHover={{ scale: 1.01 }}
               className="rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
               style={{ 
-                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
+                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
               }}
             >
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -406,7 +412,7 @@ const Index = () => {
                   <Button asChild variant="secondary" size="lg" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
                     <Link to="/contact">Schedule a Consultation</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white hover:bg-white/10 hover:text-white">
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white bg-transparent hover:bg-white/10">
                     <Link to="/jobs">Browse Opportunities</Link>
                   </Button>
                 </div>

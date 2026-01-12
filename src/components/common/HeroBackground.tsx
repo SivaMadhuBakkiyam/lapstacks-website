@@ -6,7 +6,7 @@ interface HeroBackgroundProps {
   showDecoration?: boolean;
 }
 
-export const HeroBackground = ({ children, className = "", showDecoration = true }: HeroBackgroundProps) => {
+export const HeroBackground = ({ children, className = "", showDecoration = false }: HeroBackgroundProps) => {
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* SVG Background for dark gradient pages */}
@@ -20,7 +20,7 @@ export const HeroBackground = ({ children, className = "", showDecoration = true
         {children}
       </div>
 
-      {/* Decorative Purple Wave at bottom right */}
+      {/* Decorative Purple Wave at bottom right - Only if enabled */}
       {showDecoration && (
         <div className="absolute bottom-0 right-0 w-1/3 h-32 pointer-events-none overflow-hidden">
           <svg
@@ -45,7 +45,7 @@ export const HeroBackground = ({ children, className = "", showDecoration = true
   );
 };
 
-export const LightHeroBackground = ({ children, className = "", showDecoration = true }: HeroBackgroundProps) => {
+export const LightHeroBackground = ({ children, className = "", showDecoration = false }: HeroBackgroundProps) => {
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* Subpage background */}
@@ -60,7 +60,7 @@ export const LightHeroBackground = ({ children, className = "", showDecoration =
         {children}
       </div>
 
-      {/* Decorative Purple Wave at bottom right */}
+      {/* Decorative Purple Wave at bottom right - Only if enabled */}
       {showDecoration && (
         <div className="absolute bottom-0 right-0 w-1/3 h-32 pointer-events-none overflow-hidden">
           <svg
