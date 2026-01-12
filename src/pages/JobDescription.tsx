@@ -59,6 +59,8 @@ const JobDescription = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showMainHeader, setShowMainHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -70,11 +72,24 @@ const JobDescription = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 200);
+      const currentScrollY = window.scrollY;
+      
+      // Show sticky apply header after scrolling 200px
+      setIsScrolled(currentScrollY > 200);
+      
+      // Hide main header when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowMainHeader(false);
+      } else {
+        setShowMainHeader(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener("scroll", handleScroll);
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,38 +98,52 @@ const JobDescription = () => {
   };
 
   return (
-    <Layout>
-      {/* Sticky Header */}
+    <Layout hideHeader={!showMainHeader}>
+      {/* Sticky Apply Header - Shows when scrolled and main header hidden */}
       <AnimatePresence>
-        {isScrolled && (
+        {isScrolled && !showMainHeader && (
           <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
-            className="fixed top-20 left-0 right-0 z-40 bg-card/95 backdrop-blur-sm border-b border-border shadow-sm"
+            transition={{ duration: 0.3 }}
+            className="fixed top-0 left-0 right-0 z-50 bg-card/98 backdrop-blur-md border-b border-border shadow-lg"
           >
-            <div className="container-custom py-3 flex items-center justify-between">
+            <div className="container-custom py-4 flex items-center justify-between">
               <div>
-                <h2 className="font-bold text-foreground">{jobData.title}</h2>
+                <h2 className="font-bold text-lg text-foreground">{jobData.title}</h2>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <span>{jobData.location}</span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {jobData.location}
+                  </span>
                   <span>•</span>
                   <span>{jobData.experience}</span>
+                  <span>•</span>
+                  <span>{jobData.salary}</span>
                 </div>
               </div>
-              <Button
-                onClick={() => setIsApplyModalOpen(true)}
-                className="bg-primary hover:bg-primary/90 rounded-full px-6"
-              >
-                Apply Now
-              </Button>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="p-2 hover:bg-muted rounded-full transition-colors"
+                >
+                  <Share2 className="w-5 h-5 text-muted-foreground hover:text-primary" />
+                </button>
+                <Button
+                  onClick={() => setIsApplyModalOpen(true)}
+                  className="bg-primary hover:bg-primary/90 rounded-full px-8"
+                >
+                  Apply Now
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Job Header */}
-      <LightHeroBackground className="py-12">
+      {/* Job Header - No decoration */}
+      <LightHeroBackground className="py-12" showDecoration={false}>
         <div className="container-custom relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -283,7 +312,7 @@ const JobDescription = () => {
               transition={{ delay: 0.2 }}
               className="space-y-6"
             >
-              <h3 className="text-lg font-bold">Similar jobs</h3>
+              <h3 className="text-lg font-bold text-foreground">Similar jobs</h3>
               <div className="space-y-4">
                 {similarJobs.map((job) => (
                   <Link
@@ -305,7 +334,7 @@ const JobDescription = () => {
                     </div>
                     <div className="flex items-center justify-between mt-2 text-xs">
                       <span className="text-muted-foreground">{job.experience}</span>
-                      <span>$ {job.salary}</span>
+                      <span className="text-foreground">$ {job.salary}</span>
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-xs text-muted-foreground">1 day ago</span>
@@ -407,17 +436,24 @@ const JobDescription = () => {
       {/* Success Modal */}
       <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
         <DialogContent className="sm:max-w-md text-center">
-          <div className="py-8">
-            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-              <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center">
-                <Check className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <h2 className="text-xl font-bold mb-2 text-foreground">Thank you for your application!</h2>
-            <p className="text-muted-foreground">
-              We've received it successfully. If there's a good fit, someone from our team will be in touch with you soon.
-            </p>
-          </div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <Check className="w-10 h-10 text-green-600 dark:text-green-400" />
+          </motion.div>
+          <DialogTitle className="text-2xl">Application Submitted!</DialogTitle>
+          <p className="text-muted-foreground mt-2">
+            Thank you for applying. We'll review your application and get back to you soon.
+          </p>
+          <Button
+            onClick={() => setIsSuccessModalOpen(false)}
+            className="mt-4 rounded-full px-8"
+          >
+            Close
+          </Button>
         </DialogContent>
       </Dialog>
 
