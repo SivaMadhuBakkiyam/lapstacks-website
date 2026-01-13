@@ -122,7 +122,7 @@ const Index = () => {
                   <Button asChild size="lg" className="bg-primary hover:bg-primary/90 rounded-full px-8">
                     <Link to="/jobs">Find Talent or Jobs</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white bg-transparent hover:bg-white/10">
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white/50 text-white bg-transparent hover:bg-white/10 hover:text-white">
                     <Link to="/services">Browse Opportunities</Link>
                   </Button>
                 </motion.div>
@@ -349,13 +349,14 @@ const Index = () => {
           className="section-padding relative overflow-hidden"
           style={{ backgroundColor: "#EDF5F4" }}
         >
-          {/* Globe Map Background */}
+          {/* Globe Map Background - Responsive and transparent */}
           <div 
-            className="absolute inset-0 opacity-20 bg-center bg-no-repeat"
+            className="absolute inset-0 opacity-15"
             style={{ 
               backgroundImage: "url('/images/map.svg')",
-              backgroundSize: "80%",
-              backgroundPosition: "center"
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
             }}
           />
           <div className="container-custom relative z-10">
@@ -388,35 +389,27 @@ const Index = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section - With proper styling */}
         <section className="py-16 px-4 md:px-8 lg:px-16">
           <div className="container-custom">
             <motion.div 
               whileHover={{ scale: 1.01 }}
-              className="rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
+              className="rounded-3xl p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl"
               style={{ 
-                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
               }}
             >
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                    Struggling To Find The Right IT Solutions?
-                  </h2>
-                  <p className="text-white/80">
-                    We'll Help You Connect With The Right Talent And Technology Partners For Your Business Needs.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <Button asChild variant="secondary" size="lg" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
-                    <Link to="/contact">Schedule a Consultation</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white text-white bg-transparent hover:bg-white/10">
-                    <Link to="/jobs">Browse Opportunities</Link>
-                  </Button>
-                </div>
+              <div className="text-white">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                  Struggling To Find The Right IT Solutions?
+                </h2>
+                <p className="text-white/80 max-w-md">
+                  Let us help you build the team and technology stack that will take your business to the next level.
+                </p>
               </div>
+              <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-white/50 text-white bg-transparent hover:bg-white/10 hover:text-white">
+                <Link to="/jobs">Browse Opportunities</Link>
+              </Button>
             </motion.div>
           </div>
         </section>

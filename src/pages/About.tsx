@@ -8,6 +8,7 @@ import { LightHeroBackground } from "@/components/common/HeroBackground";
 import { AnimatedCounter } from "@/components/animations/AnimatedCounter";
 import { PageTransition, FadeInSection, StaggerContainer, StaggerItem } from "@/components/animations/PageTransition";
 import officeImage from "@/assets/office-interior.jpg";
+import teamCollab from "@/assets/team-collab.jpg";
 import teamMember1 from "@/assets/team-member-1.jpg";
 import teamMember2 from "@/assets/team-member-2.jpg";
 import teamMember3 from "@/assets/team-member-3.jpg";
@@ -105,10 +106,14 @@ const teamMembers = [
   }
 ];
 
-// Gallery images for team photos
+// Gallery images for team photos - improved variety
 const galleryImages = [
-  teamMember1, teamMember2, teamMember3, teamMember4,
-  officeImage, teamMember1, teamMember3, teamMember2
+  { src: officeImage, span: "col-span-2 row-span-2" },
+  { src: teamMember1, span: "" },
+  { src: teamMember2, span: "" },
+  { src: teamMember3, span: "" },
+  { src: teamCollab, span: "col-span-2" },
+  { src: teamMember4, span: "" },
 ];
 
 const TeamCard = ({ member, index }: { member: typeof teamMembers[0]; index: number }) => {
@@ -181,11 +186,14 @@ const About = () => {
   return (
     <Layout>
       <PageTransition>
-        {/* Hero Section - Fixed to match design */}
+        {/* Hero Section - Fixed to match design with subpage background */}
         <LightHeroBackground className="py-16 md:py-24">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-12">
+                <span className="inline-block text-primary text-sm font-semibold uppercase tracking-wider mb-4 bg-primary/10 px-4 py-1 rounded-full">
+                  About Us
+                </span>
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
                   About Excellence at <span className="text-primary">Lamstacks</span>
                 </h1>
@@ -268,7 +276,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Team Gallery Section */}
+        {/* Team Gallery Section - Improved Layout */}
         <section className="section-padding">
           <div className="container-custom">
             <FadeInSection>
@@ -281,23 +289,22 @@ const About = () => {
               </div>
             </FadeInSection>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Improved Masonry-style Gallery */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[250px]">
               {galleryImages.map((img, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05, zIndex: 10 }}
-                  className={`overflow-hidden rounded-xl ${
-                    index === 0 || index === 7 ? "md:col-span-2 md:row-span-2" : ""
-                  }`}
+                  transition={{ delay: index * 0.08 }}
+                  whileHover={{ scale: 1.03, zIndex: 10 }}
+                  className={`overflow-hidden rounded-2xl shadow-lg ${img.span}`}
                 >
                   <img
-                    src={img}
-                    alt={`Gallery ${index + 1}`}
-                    className="w-full h-full object-cover aspect-square"
+                    src={img.src}
+                    alt={`Team moment ${index + 1}`}
+                    className="w-full h-full object-cover hover:brightness-110 transition-all duration-300"
                   />
                 </motion.div>
               ))}
@@ -305,16 +312,19 @@ const About = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
+        {/* Stats Section - Background #EDF5F4 with map */}
         <section 
           className="section-padding relative overflow-hidden"
           style={{ backgroundColor: "#EDF5F4" }}
         >
-          {/* Globe Map Background */}
+          {/* Globe Map Background - Responsive */}
           <div 
-            className="absolute inset-0 opacity-10 bg-center bg-no-repeat bg-contain"
+            className="absolute inset-0 opacity-15"
             style={{ 
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cellipse cx='400' cy='200' rx='350' ry='180' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cellipse cx='400' cy='200' rx='350' ry='80' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M50 200 Q400 50 750 200 Q400 350 50 200' fill='none' stroke='%23000' stroke-width='1'/%3E%3Cpath d='M400 20 Q550 200 400 380 Q250 200 400 20' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E")`
+              backgroundImage: "url('/images/map.svg')",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
             }}
           />
           <div className="container-custom relative z-10">
@@ -394,7 +404,7 @@ const About = () => {
               </div>
             </FadeInSection>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               {teamMembers.map((member, index) => (
                 <TeamCard key={member.name} member={member} index={index} />
               ))}
@@ -407,16 +417,16 @@ const About = () => {
           <div className="container-custom">
             <motion.div 
               whileHover={{ scale: 1.01 }}
-              className="rounded-3xl p-8 md:p-12 text-center"
+              className="rounded-3xl p-8 md:p-12 text-center shadow-xl"
               style={{ 
                 background: "linear-gradient(135deg, #0F5F4B 0%, #09152F 100%)"
               }}
             >
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Want to Join Our Team?
+                Ready to Join Our Team?
               </h2>
-              <p className="text-white/80 max-w-xl mx-auto mb-8">
-                We're always looking for talented individuals to join our growing team.
+              <p className="text-white/80 max-w-md mx-auto mb-8">
+                We're always looking for talented individuals who share our passion for technology and innovation.
               </p>
               <Button asChild size="lg" variant="secondary" className="rounded-full px-8 bg-white text-foreground hover:bg-white/90">
                 <Link to="/jobs">View Open Positions</Link>

@@ -23,9 +23,9 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
-        <div className="container-custom">
-          <div className="flex items-center justify-between h-16 md:h-20 bg-card rounded-full my-3 px-6 border border-border shadow-sm">
+      <header className="sticky top-0 z-50">
+        <div className="container-custom py-3">
+          <div className="flex items-center justify-between h-16 md:h-20 bg-card/95 backdrop-blur-md rounded-full px-6 border border-border shadow-lg">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <img 
