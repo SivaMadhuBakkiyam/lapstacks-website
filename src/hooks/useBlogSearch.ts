@@ -19,105 +19,106 @@ export interface BlogPost {
   category: string;
 }
 
+// Company-related blog posts
 const allPosts: BlogPost[] = [
   {
     id: 1,
-    title: "UX review presentations",
-    excerpt: "How do you create compelling presentations that wow your colleagues and impress your managers?",
+    title: "How Lamstacks Revolutionized Tech Recruitment in 2024",
+    excerpt: "Discover our innovative approach to connecting top tech talent with leading companies across India and beyond.",
     author: "Olivia Rhye",
     date: "20 Jan 2025",
     image: blogImage1,
     authorImage: teamMember1,
-    tags: ["Design", "Research", "Presentation"],
-    category: "Design"
+    tags: ["Recruitment", "Tech Industry", "Case Study"],
+    category: "Company News"
   },
   {
     id: 2,
-    title: "Migrating to Linear 101",
-    excerpt: "Linear helps streamline software projects, sprints, tasks, and bug. Letter spacing. Here's how to get...",
+    title: "Cloud Migration Success: A Client Case Study",
+    excerpt: "Learn how we helped a Fortune 500 company migrate their entire infrastructure to the cloud in just 3 months.",
     author: "Phoenix Baker",
     date: "19 Jan 2025",
     image: blogImage2,
     authorImage: teamMember2,
-    tags: ["Design", "Research"],
-    category: "Product"
+    tags: ["Cloud", "Case Study", "DevOps"],
+    category: "Case Studies"
   },
   {
     id: 3,
-    title: "Building your API Stack",
-    excerpt: "The rise of RESTful APIs has been met by a rise in tools for creating, testing, and managing...",
+    title: "The Future of AI in Enterprise: Lamstacks Vision",
+    excerpt: "Our CEO shares insights on how artificial intelligence is transforming business operations and what's next.",
     author: "Lana Steiner",
     date: "18 Jan 2025",
     image: blogImage3,
     authorImage: teamMember3,
-    tags: ["Design", "Research"],
-    category: "Engineering"
+    tags: ["AI", "Innovation", "Leadership"],
+    category: "Innovation"
   },
   {
     id: 4,
-    title: "Bill Walsh leadership lessons",
-    excerpt: "Like to know the secrets of transforming a 2-14 team into a 3x Super Bowl winning Dynasty?",
+    title: "Building High-Performance DevOps Teams",
+    excerpt: "Best practices and lessons learned from our experience building world-class DevOps capabilities for clients.",
     author: "Alec Whitten",
     date: "17 Jan 2025",
     image: blogImage1,
     authorImage: teamMember1,
-    tags: ["Leadership", "Management"],
-    category: "Leadership"
+    tags: ["DevOps", "Team Building", "Best Practices"],
+    category: "Engineering"
   },
   {
     id: 5,
-    title: "PM mental models",
-    excerpt: "Mental models are simple expressions of complex processes or relationships.",
+    title: "Why Companies Choose Lamstacks for Staff Augmentation",
+    excerpt: "Understanding the key factors that make us a preferred partner for tech talent acquisition globally.",
     author: "Demi Wilkinson",
     date: "16 Jan 2025",
     image: blogImage2,
     authorImage: teamMember4,
-    tags: ["Product", "Research", "Frameworks"],
-    category: "Product"
+    tags: ["Recruitment", "Staff Augmentation", "Business"],
+    category: "Company News"
   },
   {
     id: 6,
-    title: "What is Wireframing?",
-    excerpt: "Introduction to Wireframing and its Principles. Learn from the best in the industry.",
+    title: "Digital Transformation: A Roadmap for Success",
+    excerpt: "Step-by-step guide to planning and executing your digital transformation journey with expert support.",
     author: "Candice Wu",
     date: "15 Jan 2025",
     image: blogImage3,
     authorImage: teamMember3,
-    tags: ["Design", "Research"],
-    category: "Design"
+    tags: ["Digital Transformation", "Strategy", "Consulting"],
+    category: "Consulting"
   },
   {
     id: 7,
-    title: "How collaboration makes us better designers",
-    excerpt: "Collaboration can make our teams stronger, and our individual designs better.",
+    title: "Lamstacks Engineering Culture: How We Build Great Products",
+    excerpt: "An inside look at our engineering practices, team collaboration, and what makes our culture unique.",
     author: "Natali Craig",
     date: "14 Jan 2025",
     image: blogImage1,
     authorImage: teamMember1,
-    tags: ["Design", "Research"],
-    category: "Design"
+    tags: ["Engineering", "Culture", "Team"],
+    category: "Company News"
   },
   {
     id: 8,
-    title: "Our top 10 Javascript frameworks to use",
-    excerpt: "JavaScript frameworks make development easy with extensive features and functionalities.",
+    title: "Scaling Your Startup with the Right Tech Stack",
+    excerpt: "Expert advice on choosing technologies that will grow with your business from startup to enterprise.",
     author: "Drew Cano",
     date: "13 Jan 2025",
     image: blogImage2,
     authorImage: teamMember2,
-    tags: ["Software Development", "Tools", "SaaS"],
+    tags: ["Startups", "Tech Stack", "Growth"],
     category: "Engineering"
   },
   {
     id: 9,
-    title: "Podcast: Creating a better CX Community",
-    excerpt: "Starting a community doesn't need to be complicated, but how do you get started?",
+    title: "Customer Success Stories: Real Impact, Real Results",
+    excerpt: "Hear directly from our clients about how Lamstacks helped them achieve their technology goals.",
     author: "Orlando Diggs",
     date: "12 Jan 2025",
     image: blogImage3,
     authorImage: teamMember4,
-    tags: ["Podcasts", "Customer Success"],
-    category: "Customer Success"
+    tags: ["Customer Success", "Testimonials", "Results"],
+    category: "Case Studies"
   }
 ];
 
