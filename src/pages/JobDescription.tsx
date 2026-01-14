@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
-import { MapPin, Briefcase, Calendar, Users, Share2, Upload, X, Check } from "lucide-react";
+import { MapPin, Briefcase, Calendar, Users, Share2, Upload, X, Check, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,6 +61,9 @@ const JobDescription = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMainHeader, setShowMainHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isParsing, setIsParsing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -77,10 +80,10 @@ const JobDescription = () => {
       // Show sticky apply header after scrolling 200px
       setIsScrolled(currentScrollY > 200);
       
-      // Hide main header when scrolling down, show when scrolling up
+      // Hide main header when scrolling down past 100px, show when scrolling up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setShowMainHeader(false);
-      } else {
+      } else if (currentScrollY < lastScrollY) {
         setShowMainHeader(true);
       }
       
@@ -91,10 +94,42 @@ const JobDescription = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      setIsParsing(true);
+      
+      // Simulate resume parsing - in production, this would call an API
+      setTimeout(() => {
+        // Mock parsed data from resume
+        setFormData({
+          fullName: "John Smith",
+          email: "john.smith@email.com",
+          phone: "+91 98765 43210",
+          location: "Bangalore, India",
+          linkedIn: "linkedin.com/in/johnsmith",
+          coverLetter: ""
+        });
+        setIsParsing(false);
+      }, 1500);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsApplyModalOpen(false);
     setIsSuccessModalOpen(true);
+    // Reset form
+    setUploadedFile(null);
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      location: "",
+      linkedIn: "",
+      coverLetter: ""
+    });
   };
 
   return (
@@ -110,20 +145,20 @@ const JobDescription = () => {
             className="fixed top-0 left-0 right-0 z-50 bg-card/98 backdrop-blur-md border-b border-border shadow-lg"
           >
             <div className="container-custom py-4 flex items-center justify-between">
-              <div>
-                <h2 className="font-bold text-lg text-foreground">{jobData.title}</h2>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-bold text-lg text-foreground truncate">{jobData.title}</h2>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
                     {jobData.location}
                   </span>
-                  <span>•</span>
-                  <span>{jobData.experience}</span>
-                  <span>•</span>
-                  <span>{jobData.salary}</span>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="hidden sm:inline">{jobData.experience}</span>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="hidden sm:inline">{jobData.salary}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-shrink-0">
                 <button 
                   onClick={() => setIsShareModalOpen(true)}
                   className="p-2 hover:bg-muted rounded-full transition-colors"
@@ -132,7 +167,7 @@ const JobDescription = () => {
                 </button>
                 <Button
                   onClick={() => setIsApplyModalOpen(true)}
-                  className="bg-primary hover:bg-primary/90 rounded-full px-8"
+                  className="bg-primary hover:bg-primary/90 rounded-full px-6 sm:px-8"
                 >
                   Apply Now
                 </Button>
@@ -348,87 +383,134 @@ const JobDescription = () => {
         </div>
       </section>
 
-      {/* Apply Modal */}
+      {/* Apply Modal - Fixed height with scrollable content */}
       <Dialog open={isApplyModalOpen} onOpenChange={setIsApplyModalOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-lg max-h-[85vh] flex flex-col p-0">
+          <DialogHeader className="p-6 pb-4 flex-shrink-0 border-b border-border">
             <DialogTitle>Apply to {jobData.title}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Upload Resume/CV</label>
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
-                <Upload className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="text-sm">
-                  <span className="text-primary font-medium">Click to upload</span> or drag and drop
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Accepted file types: pdf, doc, docx | max 5Mb
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {/* File Upload */}
               <div>
-                <label className="text-sm font-medium mb-2 block">Full name</label>
+                <label className="text-sm font-medium mb-2 block">Upload Resume/CV</label>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept=".pdf,.doc,.docx"
+                  className="hidden"
+                />
+                {uploadedFile ? (
+                  <div className="border-2 border-primary/30 bg-primary/5 rounded-lg p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-8 h-8 text-primary" />
+                      <div>
+                        <p className="font-medium text-sm text-foreground">{uploadedFile.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {isParsing ? "Parsing resume..." : "Resume parsed successfully"}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUploadedFile(null);
+                        setFormData({
+                          fullName: "",
+                          email: "",
+                          phone: "",
+                          location: "",
+                          linkedIn: "",
+                          coverLetter: ""
+                        });
+                      }}
+                      className="p-1 hover:bg-muted rounded-full"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer"
+                  >
+                    <Upload className="w-8 h-8 text-primary mx-auto mb-2" />
+                    <p className="text-sm">
+                      <span className="text-primary font-medium">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Accepted file types: pdf, doc, docx | max 5Mb
+                    </p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Full name</label>
+                  <Input
+                    placeholder="Full name"
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Email</label>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Phone</label>
+                  <Input
+                    placeholder="Phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Current location</label>
+                  <Input
+                    placeholder="Current location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">LinkedIn Profile URL</label>
                 <Input
-                  placeholder="Full name"
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  placeholder="Link"
+                  value={formData.linkedIn}
+                  onChange={(e) => setFormData({ ...formData, linkedIn: e.target.value })}
                 />
               </div>
+
               <div>
-                <label className="text-sm font-medium mb-2 block">Email</label>
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                <label className="text-sm font-medium mb-2 block">Cover Letter (Optional)</label>
+                <Textarea
+                  placeholder="Tell us why you're a great fit......"
+                  rows={4}
+                  value={formData.coverLetter}
+                  onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium mb-2 block">Phone</label>
-                <Input
-                  placeholder="Phone"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-2 block">Current location</label>
-                <Input
-                  placeholder="Current location"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                />
-              </div>
+            {/* Fixed footer */}
+            <div className="p-6 pt-4 border-t border-border flex-shrink-0">
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isParsing}>
+                {isParsing ? "Parsing Resume..." : "Submit application"}
+              </Button>
             </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">LinkedIn Profile URL</label>
-              <Input
-                placeholder="Link"
-                value={formData.linkedIn}
-                onChange={(e) => setFormData({ ...formData, linkedIn: e.target.value })}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">Cover Letter (Optional)</label>
-              <Textarea
-                placeholder="Tell us why you're a great fit......"
-                rows={4}
-                value={formData.coverLetter}
-                onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
-              />
-            </div>
-
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-              Submit application
-            </Button>
           </form>
         </DialogContent>
       </Dialog>

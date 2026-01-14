@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Star, Sparkles } from "lucide-react";
+import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { HeroBackground } from "@/components/common/HeroBackground";
@@ -66,9 +67,54 @@ const clientLogos = [
   { name: "Lohono", style: "text-primary-foreground font-semibold" }
 ];
 
+const testimonials = [
+  {
+    quote: "Partnering with Lamstacks was one of the best decisions we've made for our business. Their website template is sleek, easy to customize, and optimizes performance on all devices.",
+    author: "MICHAEL TURNER",
+    role: "Product Manager at CloudSync",
+    image: testimonialImage
+  },
+  {
+    quote: "The team at Lamstacks delivered exceptional results. Their expertise in cloud migration saved us months of development time and reduced our operational costs significantly.",
+    author: "SARAH JOHNSON",
+    role: "CTO at TechFlow",
+    image: testimonialImage
+  },
+  {
+    quote: "Outstanding recruitment services! They helped us build our entire engineering team with top-tier talent. The quality of candidates exceeded our expectations.",
+    author: "DAVID CHEN",
+    role: "VP Engineering at InnovateTech",
+    image: testimonialImage
+  }
+];
+
 const Index = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Auto-rotate testimonials
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const nextTestimonial = () => {
+    setIsAutoPlaying(false);
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setIsAutoPlaying(false);
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
   return (
-    <Layout>
+    <Layout hideHeader>
       <PageTransition>
         {/* Announcement Bar - First */}
         <div className="bg-primary py-2 text-center">
@@ -77,8 +123,46 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Hero Section */}
-        <HeroBackground className="py-16 md:py-24" showDecoration={false}>
+        {/* Hero Section with Header inside */}
+        <HeroBackground className="py-6 md:py-12" showDecoration={false}>
+          {/* Header Inside Hero */}
+          <header className="mb-8">
+            <div className="container-custom">
+              <div className="flex items-center justify-between h-16 md:h-20 bg-card/95 backdrop-blur-md rounded-full px-6 border border-border shadow-lg">
+                <Link to="/" className="flex items-center gap-2">
+                  <img 
+                    src="/images/Lampstacks-logo.svg" 
+                    alt="Lamstacks" 
+                    className="h-8 w-auto dark:brightness-0 dark:invert"
+                  />
+                </Link>
+                <nav className="hidden lg:flex items-center gap-8">
+                  {[
+                    { name: "Home", path: "/" },
+                    { name: "Jobs", path: "/jobs" },
+                    { name: "Services", path: "/services" },
+                    { name: "About", path: "/about" },
+                    { name: "Contact", path: "/contact" },
+                    { name: "Blog", path: "/blog" },
+                  ].map((link) => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className="text-sm font-medium transition-colors hover:text-primary text-primary-foreground"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="hidden lg:flex items-center gap-4">
+                  <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
+                    <Link to="/contact">Let's Talk</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </header>
+
           <div className="container-custom">
             {/* HRMA Chip - Now inside hero, before heading */}
             <motion.div 
@@ -221,7 +305,7 @@ const Index = () => {
           </section>
         </FadeInSection>
 
-        {/* Services Section - Background #F2FFF7 */}
+        {/* Services Section - Background #F2FFF7, equal height cards */}
         <section className="section-padding" style={{ backgroundColor: "#F2FFF7" }}>
           <div className="container-custom">
             <FadeInSection>
@@ -243,16 +327,16 @@ const Index = () => {
                   <StaggerItem key={service.title}>
                     <motion.div
                       whileHover={{ y: -5 }}
-                      className="p-8 bg-white dark:bg-card rounded-2xl border border-border hover:shadow-lg transition-all group"
+                      className="p-8 bg-white dark:bg-card rounded-2xl border border-border hover:shadow-lg transition-all group h-full flex flex-col"
                     >
-                      <div className={`w-14 h-14 rounded-xl ${service.color} flex items-center justify-center mb-6`}>
+                      <div className={`w-14 h-14 rounded-xl ${service.color} flex items-center justify-center mb-6 flex-shrink-0`}>
                         <service.icon className="w-7 h-7" />
                       </div>
                       <h3 className="text-xl font-bold mb-3 text-foreground">{service.title}</h3>
-                      <p className="text-muted-foreground mb-4">{service.description}</p>
+                      <p className="text-muted-foreground mb-4 flex-grow">{service.description}</p>
                       <Link
                         to="/services"
-                        className="inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all"
+                        className="inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all mt-auto"
                       >
                         Learn More <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -264,7 +348,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Testimonials Section with Auto-rotating Carousel */}
         <section className="section-padding bg-muted/30 dark:bg-muted/10">
           <div className="container-custom">
             <FadeInSection>
@@ -278,64 +362,85 @@ const Index = () => {
             </FadeInSection>
 
             <FadeInSection delay={0.2}>
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                className="bg-card rounded-3xl p-8 md:p-12 shadow-lg border border-border max-w-5xl mx-auto"
-              >
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div className="relative">
-                    <img
-                      src={testimonialImage}
-                      alt="Client testimonial"
-                      className="rounded-2xl w-full aspect-[4/3] object-cover"
-                    />
-                    <motion.div 
-                      whileHover={{ scale: 1.05 }}
-                      className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl p-4 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2 text-primary">
-                        <Play className="w-8 h-8" />
-                        <span className="font-medium">Watch Story</span>
+              <div className="relative max-w-5xl mx-auto">
+                <motion.div
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-card rounded-3xl p-8 md:p-12 shadow-lg border border-border"
+                >
+                  <div className="grid md:grid-cols-2 gap-8 items-center">
+                    <div className="relative">
+                      <img
+                        src={testimonials[currentTestimonial].image}
+                        alt="Client testimonial"
+                        className="rounded-2xl w-full aspect-[4/3] object-cover"
+                      />
+                      <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl p-4 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 text-primary">
+                          <Play className="w-8 h-8" />
+                          <span className="font-medium">Watch Story</span>
+                        </div>
+                      </motion.div>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="text-4xl text-primary">"</div>
+                      <p className="text-lg text-foreground leading-relaxed">
+                        {testimonials[currentTestimonial].quote}
+                      </p>
+                      <div>
+                        <p className="font-bold text-foreground">{testimonials[currentTestimonial].author}</p>
+                        <p className="text-sm text-muted-foreground">{testimonials[currentTestimonial].role}</p>
                       </div>
-                    </motion.div>
-                  </div>
-                  <div className="space-y-6">
-                    <div className="text-4xl text-primary">"</div>
-                    <p className="text-lg text-foreground leading-relaxed">
-                      Partnering with Lamstacks was one of the best decisions we've made for our business. Their website template is sleek, easy to customize, and optimizes performance on all devices. Our customers have been praising the new design, and we've noticed improved engagement metrics across the board.
-                    </p>
-                    <div>
-                      <p className="font-bold text-foreground">MICHAEL TURNER</p>
-                      <p className="text-sm text-muted-foreground">Product Manager at CloudSync</p>
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             </FadeInSection>
 
-            {/* Improved testimonial navigation */}
+            {/* Improved testimonial navigation with progress indicator */}
             <div className="flex justify-center items-center gap-6 mt-8">
               <motion.button 
                 whileHover={{ scale: 1.1, x: -3 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={prevTestimonial}
                 className="w-12 h-12 rounded-full border-2 border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
               </motion.button>
               <div className="flex gap-3 items-center">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <motion.div
+                {testimonials.map((_, i) => (
+                  <motion.button
                     key={i}
+                    onClick={() => {
+                      setIsAutoPlaying(false);
+                      setCurrentTestimonial(i);
+                    }}
                     whileHover={{ scale: 1.3 }}
-                    className={`rounded-full transition-all cursor-pointer ${
-                      i === 0 ? "w-8 h-3 bg-primary" : "w-3 h-3 bg-muted-foreground/30 hover:bg-primary/50"
+                    className={`rounded-full transition-all cursor-pointer relative overflow-hidden ${
+                      i === currentTestimonial ? "w-8 h-3 bg-primary" : "w-3 h-3 bg-muted-foreground/30 hover:bg-primary/50"
                     }`}
-                  />
+                  >
+                    {i === currentTestimonial && isAutoPlaying && (
+                      <motion.div
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 5, ease: "linear" }}
+                        className="absolute inset-0 bg-primary/80"
+                      />
+                    )}
+                  </motion.button>
                 ))}
               </div>
               <motion.button 
                 whileHover={{ scale: 1.1, x: 3 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={nextTestimonial}
                 className="w-12 h-12 rounded-full border-2 border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -344,14 +449,14 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats Section - Background #EDF5F4 with map.svg */}
+        {/* Stats Section - Background #EDF5F4 with map.svg - proper spacing */}
         <section 
           className="section-padding relative overflow-hidden"
           style={{ backgroundColor: "#EDF5F4" }}
         >
-          {/* Globe Map Background - Responsive and transparent */}
+          {/* Globe Map Background - Responsive with proper padding */}
           <div 
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-x-0 top-12 bottom-12 opacity-10"
             style={{ 
               backgroundImage: "url('/images/map.svg')",
               backgroundSize: "contain",

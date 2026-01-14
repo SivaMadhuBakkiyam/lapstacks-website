@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ const navLinks = [
   { name: "Home", path: "/" },
   { name: "Jobs", path: "/jobs" },
   { name: "Services", path: "/services" },
-  { name: "Abouts", path: "/about" },
+  { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
   { name: "Blog", path: "/blog" },
 ];
@@ -19,7 +19,22 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
+  const handleNavClick = (path: string) => {
+    setIsOpen(false);
+    // Navigate first, then scroll
+    if (location.pathname !== path) {
+      navigate(path);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -27,7 +42,7 @@ const Header = () => {
         <div className="container-custom py-3">
           <div className="flex items-center justify-between h-16 md:h-20 bg-card/95 backdrop-blur-md rounded-full px-6 border border-border shadow-lg">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex items-center gap-2">
               <img 
                 src="/images/Lampstacks-logo.svg" 
                 alt="Lamstacks" 
@@ -38,9 +53,9 @@ const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
-                <Link
+                <button
                   key={link.path}
-                  to={link.path}
+                  onClick={() => handleNavClick(link.path)}
                   className={`text-sm font-medium transition-colors hover:text-primary ${
                     location.pathname === link.path
                       ? "text-primary"
@@ -48,7 +63,7 @@ const Header = () => {
                   }`}
                 >
                   {link.name}
-                </Link>
+                </button>
               ))}
             </nav>
 
@@ -119,20 +134,19 @@ const Header = () => {
                 exit={{ opacity: 0, height: 0 }}
                 className="lg:hidden overflow-hidden"
               >
-                <div className="py-4 space-y-2 bg-card rounded-2xl px-4 mb-4 border border-border">
+                <div className="py-4 space-y-2 bg-card rounded-2xl px-4 mb-4 border border-border mt-2">
                   {navLinks.map((link) => (
-                    <Link
+                    <button
                       key={link.path}
-                      to={link.path}
-                      onClick={() => setIsOpen(false)}
-                      className={`block py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+                      onClick={() => handleNavClick(link.path)}
+                      className={`block w-full text-left py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
                         location.pathname === link.path
                           ? "bg-primary/10 text-primary"
                           : "text-foreground hover:bg-muted"
                       }`}
                     >
                       {link.name}
-                    </Link>
+                    </button>
                   ))}
                   <div className="pt-4 px-4">
                     <Button 

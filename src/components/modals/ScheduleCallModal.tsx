@@ -43,7 +43,6 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
     message: ""
   });
   const [isBooked, setIsBooked] = useState(false);
-  const [useCalendly, setUseCalendly] = useState(false);
 
   const dates = generateDates();
 
@@ -67,16 +66,25 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
     });
   };
 
-  const openCalendly = () => {
-    window.open(CALENDLY_LINK, "_blank");
+  const openCalendlyWithData = () => {
+    // Open Calendly with prefilled data if available
+    let url = CALENDLY_LINK;
+    if (formData.name || formData.email) {
+      const params = new URLSearchParams();
+      if (formData.name) params.append("name", formData.name);
+      if (formData.email) params.append("email", formData.email);
+      url = `${CALENDLY_LINK}?${params.toString()}`;
+    }
+    window.open(url, "_blank");
   };
 
   // Reset state when modal closes
   useEffect(() => {
     if (!isOpen) {
       setStep(1);
-      setUseCalendly(false);
       setIsBooked(false);
+      setSelectedDate(null);
+      setSelectedTime(null);
     }
   }, [isOpen]);
 
@@ -95,11 +103,11 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="bg-card rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
+            className="bg-card rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border">
+            <div className="flex items-center justify-between p-6 border-b border-border flex-shrink-0">
               <div>
                 <h2 className="text-xl font-bold text-foreground">Schedule a Call</h2>
                 <p className="text-sm text-muted-foreground">Book a time that works for you</p>
@@ -112,8 +120,8 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
               </button>
             </div>
 
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            {/* Content - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-6">
               <AnimatePresence mode="wait">
                 {isBooked ? (
                   <motion.div
@@ -155,17 +163,17 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                   >
-                    {/* Calendly Option */}
+                    {/* Calendly Option - Same as old version */}
                     <div className="mb-6 p-4 bg-primary/5 rounded-xl border border-primary/20">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
-                          <h4 className="font-semibold text-foreground">Prefer Calendly?</h4>
-                          <p className="text-sm text-muted-foreground">Schedule directly via our Calendly</p>
+                          <h4 className="font-semibold text-foreground">Quick Schedule via Calendly</h4>
+                          <p className="text-sm text-muted-foreground">Schedule directly with our calendar</p>
                         </div>
                         <Button 
-                          onClick={openCalendly}
+                          onClick={openCalendlyWithData}
                           variant="outline" 
-                          className="gap-2 rounded-full"
+                          className="gap-2 rounded-full w-full sm:w-auto"
                         >
                           Open Calendly
                           <ExternalLink className="w-4 h-4" />
@@ -178,7 +186,50 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                         <div className="w-full border-t border-border"></div>
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-2 text-muted-foreground">Or schedule below</span>
+                        <span className="bg-card px-2 text-muted-foreground">Or fill details below</span>
+                      </div>
+                    </div>
+
+                    {/* Form fields in step 1 - Old version style */}
+                    <div className="space-y-4 mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block text-foreground">Name *</label>
+                          <Input
+                            placeholder="John Doe"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block text-foreground">Company</label>
+                          <Input
+                            placeholder="Your Company"
+                            value={formData.company}
+                            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block text-foreground">Email *</label>
+                          <Input
+                            type="email"
+                            placeholder="john@example.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block text-foreground">Phone</label>
+                          <Input
+                            placeholder="+91 98765 43210"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -188,7 +239,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                         <Calendar className="w-5 h-5 text-primary" />
                         Select a Date
                       </h3>
-                      <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                         {dates.slice(0, 10).map((date) => (
                           <button
                             key={date.toISOString()}
@@ -217,7 +268,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                         <Clock className="w-5 h-5 text-primary" />
                         Select a Time (IST)
                       </h3>
-                      <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                         {timeSlots.map((time) => (
                           <button
                             key={time}
@@ -243,8 +294,8 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                     className="space-y-4"
                   >
                     {/* Selected DateTime Summary */}
-                    <div className="p-4 bg-primary/5 rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-4">
+                    <div className="p-4 bg-primary/5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-primary" />
                           <span className="text-foreground">{selectedDate && formatDate(selectedDate)}</span>
@@ -262,44 +313,29 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                       </button>
                     </div>
 
-                    {/* Form Fields */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium mb-2 block text-foreground">Name *</label>
-                        <Input
-                          placeholder="John Doe"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          required
-                        />
+                    {/* Summary of entered info */}
+                    <div className="p-4 bg-muted/50 rounded-xl space-y-2">
+                      <h4 className="font-semibold text-foreground">Your Information</h4>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <span className="text-muted-foreground">Name:</span>
+                        <span className="text-foreground">{formData.name}</span>
+                        {formData.company && (
+                          <>
+                            <span className="text-muted-foreground">Company:</span>
+                            <span className="text-foreground">{formData.company}</span>
+                          </>
+                        )}
+                        <span className="text-muted-foreground">Email:</span>
+                        <span className="text-foreground">{formData.email}</span>
+                        {formData.phone && (
+                          <>
+                            <span className="text-muted-foreground">Phone:</span>
+                            <span className="text-foreground">{formData.phone}</span>
+                          </>
+                        )}
                       </div>
-                      <div>
-                        <label className="text-sm font-medium mb-2 block text-foreground">Company</label>
-                        <Input
-                          placeholder="Your Company"
-                          value={formData.company}
-                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        />
-                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block text-foreground">Email *</label>
-                      <Input
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block text-foreground">Phone</label>
-                      <Input
-                        placeholder="+91 98765 43210"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
-                    </div>
+
                     <div>
                       <label className="text-sm font-medium mb-2 block text-foreground">What would you like to discuss?</label>
                       <textarea
@@ -317,7 +353,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
 
             {/* Footer */}
             {!isBooked && (
-              <div className="flex items-center justify-between p-6 border-t border-border bg-muted/30">
+              <div className="flex items-center justify-between p-6 border-t border-border bg-muted/30 flex-shrink-0">
                 {step === 2 && (
                   <Button
                     variant="ghost"
@@ -333,7 +369,7 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                 {step === 1 ? (
                   <Button
                     onClick={() => setStep(2)}
-                    disabled={!selectedDate || !selectedTime}
+                    disabled={!selectedDate || !selectedTime || !formData.name || !formData.email}
                     className="gap-2 rounded-full px-6"
                   >
                     Continue
@@ -342,7 +378,6 @@ export const ScheduleCallModal = ({ isOpen, onClose }: ScheduleCallModalProps) =
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    disabled={!formData.name || !formData.email}
                     className="gap-2 rounded-full px-6"
                   >
                     <Check className="w-4 h-4" />

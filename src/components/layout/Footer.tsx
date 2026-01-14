@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Linkedin, Twitter, Facebook, Instagram, Youtube } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const Footer = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <footer className="bg-foreground dark:bg-card text-background dark:text-foreground">
@@ -11,13 +17,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="space-y-6">
-            <Link to="/" className="flex items-center gap-2">
+            <button onClick={() => handleNavClick("/")} className="flex items-center gap-2">
               <img 
                 src="/images/Lampstacks-logo.svg" 
                 alt="Lamstacks" 
                 className={`h-8 w-auto ${theme === 'dark' ? '' : 'brightness-0 invert'}`}
               />
-            </Link>
+            </button>
             <p className="text-sm text-gray-400 dark:text-muted-foreground leading-relaxed">
               We provide exceptional IT services with expertise in DevOps, IT Consulting, Mobile App Development, and Digital Transformation. Building the future, one solution at a time.
             </p>
@@ -67,14 +73,20 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-6 text-background dark:text-foreground">Quick Links</h4>
             <ul className="space-y-3">
-              {["Home", "Jobs", "About Us", "Blog", "Contact"].map((link) => (
-                <li key={link}>
-                  <Link
-                    to={link === "Home" ? "/" : `/${link.toLowerCase().replace(" ", "-")}`}
+              {[
+                { name: "Home", path: "/" },
+                { name: "Jobs", path: "/jobs" },
+                { name: "About Us", path: "/about" },
+                { name: "Blog", path: "/blog" },
+                { name: "Contact", path: "/contact" }
+              ].map((link) => (
+                <li key={link.name}>
+                  <button
+                    onClick={() => handleNavClick(link.path)}
                     className="text-sm text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors"
                   >
-                    {link}
-                  </Link>
+                    {link.name}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -86,12 +98,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {["Recruitment", "DevOps", "IT Consulting", "Mobile Development", "Digital Transformation"].map((service) => (
                 <li key={service}>
-                  <Link
-                    to="/services"
+                  <button
+                    onClick={() => handleNavClick("/services")}
                     className="text-sm text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors"
                   >
                     {service}
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -118,19 +130,19 @@ const Footer = () => {
           <p className="text-sm text-gray-400 dark:text-muted-foreground">
             © 2025 Lamstacks. All Rights Reserved.
           </p>
-          <div className="flex gap-6 text-sm">
-            <Link to="/terms" className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm">
+            <button onClick={() => handleNavClick("/terms")} className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
               Term Of Service
-            </Link>
-            <Link to="/privacy" className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
+            </button>
+            <button onClick={() => handleNavClick("/privacy")} className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
               Policy Service
-            </Link>
-            <Link to="/cookies" className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
+            </button>
+            <button onClick={() => handleNavClick("/cookies")} className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
               Cookie Policy
-            </Link>
-            <Link to="/faq" className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
+            </button>
+            <button onClick={() => handleNavClick("/faq")} className="text-gray-400 dark:text-muted-foreground hover:text-primary transition-colors">
               FAQ
-            </Link>
+            </button>
           </div>
         </div>
       </div>
