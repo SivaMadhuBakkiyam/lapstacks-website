@@ -94,8 +94,8 @@ const Services = () => {
           </div>
         </LightHeroBackground>
 
-        {/* Services Grid */}
-        <section className="section-padding" style={{ backgroundColor: "#F2FFF7" }}>
+        {/* Services Grid - Dark mode compatible */}
+        <section className="section-padding bg-[#F2FFF7] dark:bg-muted/10">
           <div className="container-custom">
             <StaggerContainer>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

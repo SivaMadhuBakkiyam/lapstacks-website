@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowRight, Users, Server, Cloud, Cpu, Play, ChevronLeft, ChevronRight, Sparkles, Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { HeroBackground } from "@/components/common/HeroBackground";
 import { AnimatedCounter } from "@/components/animations/AnimatedCounter";
 import { FadeInSection, StaggerContainer, StaggerItem } from "@/components/animations/PageTransition";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { VideoModal } from "@/components/modals/VideoModal";
+import { ScheduleCallModal } from "@/components/modals/ScheduleCallModal";
+import { useTheme } from "@/contexts/ThemeContext";
 import heroImage from "@/assets/hero-office.jpg";
 import testimonialImage from "@/assets/testimonial-1.jpg";
 
@@ -88,9 +91,24 @@ const testimonials = [
   }
 ];
 
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Jobs", path: "/jobs" },
+  { name: "Services", path: "/services" },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+  { name: "Blog", path: "/blog" },
+];
+
 const Index = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Auto-rotate testimonials
   useEffect(() => {
@@ -102,6 +120,14 @@ const Index = () => {
     
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
+
+  const handleNavClick = (path: string) => {
+    setIsMenuOpen(false);
+    if (location.pathname !== path) {
+      navigate(path);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const nextTestimonial = () => {
     setIsAutoPlaying(false);
@@ -125,41 +151,101 @@ const Index = () => {
 
         {/* Hero Section with Header inside */}
         <HeroBackground className="py-6 md:py-12" showDecoration={false}>
-          {/* Header Inside Hero */}
-          <header className="mb-8">
+          {/* Header Inside Hero - Fixed visibility with proper z-index and colors */}
+          <header className="mb-8 relative z-50">
             <div className="container-custom">
-              <div className="flex items-center justify-between h-16 md:h-20 bg-card/95 backdrop-blur-md rounded-full px-6 border border-border shadow-lg">
+              <div className="flex items-center justify-between h-16 md:h-20 bg-white/10 backdrop-blur-md rounded-full px-6 border border-white/20 shadow-lg">
                 <Link to="/" className="flex items-center gap-2">
                   <img 
                     src="/images/Lampstacks-logo.svg" 
                     alt="Lamstacks" 
-                    className="h-8 w-auto dark:brightness-0 dark:invert"
+                    className="h-8 w-auto brightness-0 invert"
                   />
                 </Link>
                 <nav className="hidden lg:flex items-center gap-8">
-                  {[
-                    { name: "Home", path: "/" },
-                    { name: "Jobs", path: "/jobs" },
-                    { name: "Services", path: "/services" },
-                    { name: "About", path: "/about" },
-                    { name: "Contact", path: "/contact" },
-                    { name: "Blog", path: "/blog" },
-                  ].map((link) => (
-                    <Link
+                  {navLinks.map((link) => (
+                    <button
                       key={link.path}
-                      to={link.path}
-                      className="text-sm font-medium transition-colors hover:text-primary text-primary-foreground"
+                      onClick={() => handleNavClick(link.path)}
+                      className={`text-sm font-medium transition-colors hover:text-primary ${
+                        location.pathname === link.path ? "text-primary" : "text-white"
+                      }`}
                     >
                       {link.name}
-                    </Link>
+                    </button>
                   ))}
                 </nav>
                 <div className="hidden lg:flex items-center gap-4">
-                  <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
-                    <Link to="/contact">Let's Talk</Link>
+                  <Button 
+                    onClick={() => setIsScheduleModalOpen(true)}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6"
+                  >
+                    Let's Talk
                   </Button>
+                  <button 
+                    onClick={toggleTheme}
+                    className="flex items-center justify-center w-10 h-10 rounded-full border border-white/30 hover:bg-white/10 transition-colors text-white"
+                    aria-label="Toggle theme"
+                  >
+                    {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <div className="flex lg:hidden items-center gap-2">
+                  <button 
+                    onClick={toggleTheme}
+                    className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                    aria-label="Toggle theme"
+                  >
+                    {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                  </button>
+                  <button
+                    className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Toggle menu"
+                  >
+                    {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                  </button>
                 </div>
               </div>
+
+              {/* Mobile Navigation */}
+              {isMenuOpen && (
+                <motion.nav
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="lg:hidden overflow-hidden"
+                >
+                  <div className="py-4 space-y-2 bg-card rounded-2xl px-4 mb-4 border border-border mt-2">
+                    {navLinks.map((link) => (
+                      <button
+                        key={link.path}
+                        onClick={() => handleNavClick(link.path)}
+                        className={`block w-full text-left py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+                          location.pathname === link.path
+                            ? "bg-primary/10 text-primary"
+                            : "text-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {link.name}
+                      </button>
+                    ))}
+                    <div className="pt-4 px-4">
+                      <Button 
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsScheduleModalOpen(true);
+                        }}
+                        className="w-full bg-primary hover:bg-primary/90 rounded-full"
+                      >
+                        Let's Talk
+                      </Button>
+                    </div>
+                  </div>
+                </motion.nav>
+              )}
             </div>
           </header>
 
@@ -291,12 +377,13 @@ const Index = () => {
                   </motion.p>
                 </div>
                 <motion.button
+                  onClick={() => setIsVideoModalOpen(true)}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
                   whileHover={{ scale: 1.1 }}
-                  className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute right-8 md:right-16 top-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg cursor-pointer"
                 >
                   <Play className="w-6 h-6 text-primary ml-1" />
                 </motion.button>
@@ -305,8 +392,8 @@ const Index = () => {
           </section>
         </FadeInSection>
 
-        {/* Services Section - Background #F2FFF7, equal height cards */}
-        <section className="section-padding" style={{ backgroundColor: "#F2FFF7" }}>
+        {/* Services Section - Dark mode compatible */}
+        <section className="section-padding bg-[#F2FFF7] dark:bg-muted/10">
           <div className="container-custom">
             <FadeInSection>
               <div className="text-center mb-16">
@@ -449,14 +536,13 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats Section - Background #EDF5F4 with map.svg - proper spacing */}
+        {/* Stats Section - Background with map.svg - proper spacing and dark mode text fix */}
         <section 
-          className="section-padding relative overflow-hidden"
-          style={{ backgroundColor: "#EDF5F4" }}
+          className="section-padding relative overflow-hidden bg-[#EDF5F4] dark:bg-muted/20"
         >
-          {/* Globe Map Background - Responsive with proper padding */}
+          {/* Globe Map Background - Responsive with proper padding and transparency */}
           <div 
-            className="absolute inset-x-0 top-12 bottom-12 opacity-10"
+            className="absolute inset-x-0 top-16 bottom-16 opacity-[0.08] dark:opacity-[0.05]"
             style={{ 
               backgroundImage: "url('/images/map.svg')",
               backgroundSize: "contain",
@@ -467,13 +553,13 @@ const Index = () => {
           <div className="container-custom relative z-10">
             <FadeInSection>
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white">
                   Built in India, trusted worldwide
                 </h2>
                 <p className="mt-2 text-xl font-semibold bg-gradient-to-r from-primary via-brand-purple to-brand-green bg-clip-text text-transparent">
                   we're here 24/7 support.
                 </p>
-                <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+                <p className="mt-4 text-muted-foreground dark:text-gray-300 max-w-xl mx-auto">
                   The core values and principles that drive us to deliver excellence across continents
                 </p>
               </div>
@@ -486,7 +572,7 @@ const Index = () => {
                     <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                       <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={2000} />
                     </div>
-                    <div className="text-muted-foreground">{stat.label}</div>
+                    <div className="text-muted-foreground dark:text-gray-300">{stat.label}</div>
                   </div>
                 </FadeInSection>
               ))}
@@ -518,6 +604,19 @@ const Index = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Video Modal */}
+        <VideoModal
+          isOpen={isVideoModalOpen}
+          onClose={() => setIsVideoModalOpen(false)}
+          videoUrl="https://vimeo.com/1154243348"
+        />
+
+        {/* Schedule Call Modal */}
+        <ScheduleCallModal
+          isOpen={isScheduleModalOpen}
+          onClose={() => setIsScheduleModalOpen(false)}
+        />
       </PageTransition>
     </Layout>
   );
