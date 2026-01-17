@@ -106,14 +106,14 @@ const teamMembers = [
   }
 ];
 
-// Gallery images for team photos - improved variety
+// Masonry gallery images for team photos - improved variety with better sizing
 const galleryImages = [
-  { src: officeImage, span: "col-span-2 row-span-2" },
-  { src: teamMember1, span: "" },
-  { src: teamMember2, span: "" },
-  { src: teamMember3, span: "" },
-  { src: teamCollab, span: "col-span-2" },
-  { src: teamMember4, span: "" },
+  { src: officeImage, span: "col-span-2 row-span-2", alt: "Modern office space" },
+  { src: teamMember1, span: "col-span-1 row-span-1", alt: "Team member working" },
+  { src: teamMember2, span: "col-span-1 row-span-1", alt: "Collaboration session" },
+  { src: teamCollab, span: "col-span-2 row-span-1", alt: "Team collaboration" },
+  { src: teamMember3, span: "col-span-1 row-span-1", alt: "Team member portrait" },
+  { src: teamMember4, span: "col-span-1 row-span-1", alt: "Team member at work" },
 ];
 
 const TeamCard = ({ member, index }: { member: typeof teamMembers[0]; index: number }) => {
@@ -276,7 +276,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Team Gallery Section - Improved Layout */}
+        {/* Team Gallery Section - Improved Masonry Layout */}
         <section className="section-padding">
           <div className="container-custom">
             <FadeInSection>
@@ -289,22 +289,22 @@ const About = () => {
               </div>
             </FadeInSection>
 
-            {/* Improved Masonry-style Gallery */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[250px]">
+            {/* Masonry-style Gallery with proper grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {galleryImages.map((img, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
+                  transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.03, zIndex: 10 }}
-                  className={`overflow-hidden rounded-2xl shadow-lg ${img.span}`}
+                  className={`overflow-hidden rounded-2xl shadow-lg group ${img.span}`}
                 >
                   <img
                     src={img.src}
-                    alt={`Team moment ${index + 1}`}
-                    className="w-full h-full object-cover hover:brightness-110 transition-all duration-300"
+                    alt={img.alt}
+                    className="w-full h-full object-cover group-hover:brightness-110 transition-all duration-300 min-h-[150px] md:min-h-[200px]"
                   />
                 </motion.div>
               ))}
@@ -312,14 +312,13 @@ const About = () => {
           </div>
         </section>
 
-        {/* Stats Section - Background #EDF5F4 with map */}
+        {/* Stats Section - With map background and dark mode fixes */}
         <section 
-          className="section-padding relative overflow-hidden"
-          style={{ backgroundColor: "#EDF5F4" }}
+          className="section-padding relative overflow-hidden bg-[#EDF5F4] dark:bg-muted/20"
         >
-          {/* Globe Map Background - Responsive */}
+          {/* Globe Map Background - Responsive with proper padding */}
           <div 
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-x-0 top-16 bottom-16 opacity-[0.08] dark:opacity-[0.05]"
             style={{ 
               backgroundImage: "url('/images/map.svg')",
               backgroundSize: "contain",
@@ -330,13 +329,13 @@ const About = () => {
           <div className="container-custom relative z-10">
             <FadeInSection>
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white">
                   Built in India, trusted worldwide
                 </h2>
                 <p className="mt-2 text-xl font-semibold bg-gradient-to-r from-primary via-brand-purple to-brand-green bg-clip-text text-transparent">
                   we're here 24/7 support.
                 </p>
-                <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
+                <p className="mt-4 text-muted-foreground dark:text-gray-300 max-w-xl mx-auto">
                   The core values and principles that drive us to deliver excellence across continents
                 </p>
               </div>
@@ -349,7 +348,7 @@ const About = () => {
                     <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                       <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={2000} />
                     </div>
-                    <div className="text-muted-foreground">{stat.label}</div>
+                    <div className="text-muted-foreground dark:text-gray-300">{stat.label}</div>
                   </div>
                 </FadeInSection>
               ))}

@@ -77,13 +77,12 @@ const JobDescription = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Show sticky apply header after scrolling 200px
-      setIsScrolled(currentScrollY > 200);
-      
-      // Hide main header when scrolling down past 100px, show when scrolling up
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Show sticky apply header after scrolling 300px
+      if (currentScrollY > 300) {
+        setIsScrolled(true);
         setShowMainHeader(false);
-      } else if (currentScrollY < lastScrollY) {
+      } else {
+        setIsScrolled(false);
         setShowMainHeader(true);
       }
       
